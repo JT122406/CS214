@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
+
 //factor 32 prints 2 16 times which is not right
 int factors(int n){  //returns number of factors not including 1 and itself
     int count = 0;
@@ -31,13 +33,13 @@ int main(int argc, char *argv[])
             }
             if (isPrime == 1){
                 if((n / i) > 1){  //more than one of that factor
-                    for (int k = 0; k < (n/i); k++){
+                    for (int k = 0; k < (log(n)/ log(i)); k++){
                         printf("%d" , i);
                         printf("%c", ' ');
                     }
                 } else{
-                    //printf("%d" , i);
-                    //printf("%c", ' ');
+                    printf("%d" , i);
+                    printf("%c", ' ');
                 }
             }
         }
