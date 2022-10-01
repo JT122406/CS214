@@ -32,8 +32,9 @@ int main(int argc, char *argv[])
                 }
             }
             if (isPrime == 1){
-                if((n / i) > 1){  //more than one of that factor
-                    for (int k = 0; k < (log(n)/ log(i)); k++){
+                double thingy = (log(n)/ log(i));
+                if(thingy > 1  && (ceilf(thingy) == thingy)  && (floorf(thingy) ==thingy)){  //more than one of that factor
+                    for (int k = 0; k < thingy; k++){
                         printf("%d" , i);
                         printf("%c", ' ');
                     }
