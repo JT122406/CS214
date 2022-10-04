@@ -17,12 +17,14 @@ int main(int argc, char *argv[]) {
 
 
     int boolean = 0;
-    char* line;
+    char line[100];
     while (scanf("%s", line) != EOF) { //Reads in the string to search
         for (int i = 0; i < line[i] != '\0'; i++) {
             if (line[i] == search[0]){  //First Character Matches the looking string
-                for (int j = 1; j < string; j++) {  //Checks the rest of the string
-                    i++;
+            int j = 1;
+            do
+            {
+                i++;
                     if (search[j] != line[i]){
                         boolean = 1;
                         break;
@@ -30,28 +32,17 @@ int main(int argc, char *argv[]) {
                         i--;
                         break;
                     }
-                }
+                    j++;
+            } while (search[i] != '\0');
                 if (boolean == 0) {
                     printf("%s", line);
                     printf("%c", '\n');
                     break;
                 }
+                
             }
-        }
-
-        if (boolean == 0) {
-            for (int i = 0; i < line[i] != '\0'; i++){
-                printf("%c", line[i]);
-            }
-            printf("%c", ' ');
         }
         boolean = 0;
-        printf("%c", '\n');
-
-        for (int k = 0; k < sizeof(line); k++)
-        {
-            line[k] = '\0';
-        }
         
     }
     return 0;
