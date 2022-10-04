@@ -1,25 +1,24 @@
 #include <stdio.h>
 
 int main(int argc, char *argv[]) {
+    int caseSensetive = 0;
+
     if((argc < 2) || (*argv[1] == '\0')){  //Makes sure there is a string to search for
         return 0;
     }
-    char* search = argv[1]; //The string to search for
-    int string = 0;
-    for(int i = 0; argv[1][i] != '\0'; i++){
-        search[i] = argv[1][i];
-        string++;
+    char* search = argv[1]; //The string to search for and if we are case sensetive
+    if (argv[1][0] == '-'  && argv[1][1] == 'i'){
+            caseSensetive = 1;
+            search = argv[2];
+    } else {
+        search = argv[1];
     }
 
 
+
     int boolean = 0;
-    char line[100];
-
+    char* line;
     while (scanf("%s", line) != EOF) { //Reads in the string to search
-
-
-
-
         for (int i = 0; i < line[i] != '\0'; i++) {
             if (line[i] == search[0]){  //First Character Matches the looking string
                 for (int j = 1; j < string; j++) {  //Checks the rest of the string
@@ -33,8 +32,8 @@ int main(int argc, char *argv[]) {
                     }
                 }
                 if (boolean == 0) {
-                    //printf("%s", line);
-                    //printf("%s", "\n");
+                    printf("%s", line);
+                    printf("%c", '\n');
                     break;
                 }
             }
@@ -44,14 +43,16 @@ int main(int argc, char *argv[]) {
             for (int i = 0; i < line[i] != '\0'; i++){
                 printf("%c", line[i]);
             }
-            printf("%s", " ");
+            printf("%c", ' ');
         }
-
         boolean = 0;
+        printf("%c", '\n');
 
-        //printf("%s", "\n");
-
-
+        for (int k = 0; k < sizeof(line); k++)
+        {
+            line[k] = '\0';
+        }
+        
     }
     return 0;
 }
