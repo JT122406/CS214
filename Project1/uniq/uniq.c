@@ -21,17 +21,16 @@ node_data *create_new_node(char* value){
 
 int main(int argc, char *argv[])
 {
-    struct node* head = (struct node*)malloc(sizeof(struct node));
+    node_data head = (struct node*)malloc(sizeof(struct node));
     //very important this is how you should be declaring your nodes
     //your nodes are technically a pointer to a pointer
 
-    head->line = "poop";
     node_data *ptr = head;
     char line[100];
     while (scanf("%s", line) != EOF) { //Reads in the string to search
         if(head->next == NULL){
             head->next = create_new_node(line);
-        } else{
+        }else{
             int boolean = 0;
             node_data* temp = head->next;
             while (temp->next != NULL){
