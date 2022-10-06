@@ -20,8 +20,8 @@ if (caseSensetive == 0)  //case do not matter
 {
     int boolean = 0;
     char line[100];
-    while (scanf("%s", line) != EOF) { //Reads in the string to search
-        for (int i = 0; i < line[i] != '\0'; i++) {
+    while (scanf("%[^\n]", line) != EOF) { //Reads in the string to search
+        for (int i = 0; line[i] != '\0'; i++) {
             if (tolower(line[i]) == tolower(search[0])){  //First Character Matches the looking string
             int j = 1;
             do
