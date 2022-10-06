@@ -75,7 +75,7 @@ int main(int argc, char *argv[]){
 
 
 
-printMap(4, 6, 0, 0, 2, 4, 1, 1);
+printMap(boardX, boardY, plrX, plrY, goalX, goalY, monX, monY);
 return EXIT_SUCCESS;
 
 
