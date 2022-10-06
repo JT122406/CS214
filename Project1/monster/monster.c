@@ -22,13 +22,7 @@ if((absVal(playerX - monsterX)) == absVal(playerY - monsterY)){
 }
 
 int absVal(int x){
-    if(x < 0){
-        x = x * -1;
-        return x;
-    }
-    else
-    return x;
-
+    return (x < 0) ? -x : x;
 }
 
 
@@ -89,4 +83,9 @@ printMap(boardX, boardY, plrX, plrY, goalX, goalY, monX, monY);
 return EXIT_SUCCESS;
 
 
+char current;
+    while (scanf("%c", current)!= EOF) 
+    {
+        /* code */
+    }
 }
