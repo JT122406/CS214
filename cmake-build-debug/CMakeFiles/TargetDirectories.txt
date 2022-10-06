@@ -1,3 +1,0 @@
-/common/home/jtm258/CS214/cmake-build-debug/CMakeFiles/CS214.dir
-/common/home/jtm258/CS214/cmake-build-debug/CMakeFiles/edit_cache.dir
-/common/home/jtm258/CS214/cmake-build-debug/CMakeFiles/rebuild_cache.dir
