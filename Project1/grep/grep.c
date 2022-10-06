@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
 int main(int argc, char *argv[]) {
     int caseSensetive = 0;
@@ -14,13 +15,12 @@ int main(int argc, char *argv[]) {
     } else {
         search = argv[1];
     }
-
+    int boolean = 0;
+    char line[100];
 
 if (caseSensetive == 0)  //case do not matter
 {
-    int boolean = 0;
-    char line[100];
-    while (scanf("%[^\n]", line) != EOF) { //Reads in the string to search
+    while (scanf(" %100[0-9a-zA-Z ]", line) != EOF) { //Reads in the string to search
         for (int i = 0; line[i] != '\0'; i++) {
             if (tolower(line[i]) == tolower(search[0])){  //First Character Matches the looking string
             int j = 1;
@@ -35,22 +35,19 @@ if (caseSensetive == 0)  //case do not matter
                         break;
                     }
                     j++;
-            } while (search[i] != '\0');
+            } while (i < strlen(search) && i < strlen(line));  //prevent possible null pointer
                 if (boolean == 0) {
                     printf("%s", line);
                     printf("%c", '\n');
                     break;
-                }
-                
+                } 
             }
         }
         boolean = 0;
     }
 } else { //case sensetive 
-int boolean = 0;
-    char line[100];
-    while (scanf("%s", line) != EOF) { //Reads in the string to search
-        for (int i = 0; i < line[i] != '\0'; i++) {
+    while (scanf(" %100[0-9a-zA-Z ]", line) != EOF) { //Reads in the string to search
+        for (int i = 0; line[i] != '\0'; i++) {
             if (line[i] == search[0]){  //First Character Matches the looking string
             int j = 1;
             do
@@ -64,17 +61,15 @@ int boolean = 0;
                         break;
                     }
                     j++;
-            } while (search[i] != '\0');
+            } while (i < strlen(search) && i < strlen(line));  //prevent possible null pointer
                 if (boolean == 0) {
                     printf("%s", line);
                     printf("%c", '\n');
                     break;
-                }
-                
+                } 
             }
         }
         boolean = 0;
     }
-}
     return 0;
 }
