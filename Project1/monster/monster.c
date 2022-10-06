@@ -40,14 +40,14 @@ int random1(int seed){
     }
 }
 
-void printMap(int playerX, int playerY, int monsterX, int monsterY, int goalX, int goalY, int mapX, int mapY){
-    for(int i = mapX - 1; i >= 0 ; i--){
+void printMap(int mapX, int mapY, int playerX, int playerY, int goalX, int goalY, int monsterX, int monsterY){
+    for(int i = mapY - 1; i >= 0 ; i--){
         for(int j = 0; j < mapX; j++){
-            if(i == playerX && j == playerY)
+            if(i == playerY && j == playerX)
                 printf("%c ", 'P');
-            else if(i == monsterX && j == monsterY)
+            else if(i == monsterY && j == monsterX)
                 printf("%c ", 'M');
-            else if(i == goalX && j == goalY)
+            else if(i == goalY && j == goalX)
                 printf("%c ", 'G');
             else{
                 printf("%c ", '.');
@@ -59,7 +59,7 @@ void printMap(int playerX, int playerY, int monsterX, int monsterY, int goalX, i
 }
 
 int main(int argc, char *argv[]){
-printMap(0, 0, 3, 4, 1, 1, 5, 5);
+printMap(4, 6, 0, 0, 2, 4, 1, 1);
 return EXIT_SUCCESS;
 
 
