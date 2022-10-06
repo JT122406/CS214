@@ -14,13 +14,7 @@ if((absVal(playerX - monsterX)) == absVal(playerY - monsterY)){
 }
 */
 int absVal(int x){
-    if(x < 0){
-        x = x * -1;
-        return x;
-    }
-    else
-    return x;
-
+    return (x < 0) ? -x : x;
 }
 
 
@@ -77,6 +71,10 @@ int main(int argc, char *argv[]){
 
 printMap(boardX, boardY, plrX, plrY, goalX, goalY, monX, monY);
 return EXIT_SUCCESS;
+
+
+
+
 
 
 }
