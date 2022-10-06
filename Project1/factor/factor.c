@@ -13,8 +13,6 @@ int numFactors(int n){
 }
 
 
-
-
 void primeFactors1(int n){
     for (int i = 2; i <= n; i ++){
         while(n % i == 0){
