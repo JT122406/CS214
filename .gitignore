@@ -7,5 +7,5 @@
 /dataSources/
 /dataSources.local.xml
 #ide files
-.idea/
-.vscode/
+Project1/.idea/
+Project1/.vscode/
