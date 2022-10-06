@@ -1,18 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/*
-int* MonsterMove(int playerX, int playerY, int monsterX, int monsterY){
+
+int* MonsterMove(int playerX, int playerY, int goalX, int goalY, int monsterX, int monsterY){
+int newCords [2] = {monsterX, monsterY};
+char direction = 'A';
 if((absVal(playerX - monsterX)) == absVal(playerY - monsterY)){
     //write thing to make random move here
-    int r = rand() % 2;
+    int r = random1(playerX + monsterY);
+    if(r == 1){
+        //move horizontal
+    }
+    else{
+        //move vertical
+    }
 
 
 }
 
 
 }
-*/
+
 int absVal(int x){
     if(x < 0){
         x = x * -1;
@@ -59,7 +67,7 @@ void printMap(int mapX, int mapY, int playerX, int playerY, int goalX, int goalY
 }
 
 int main(int argc, char *argv[]){
-
+    int gameEnd = 0;
     if((argc < 8) || (*argv[1] == '\0')){  //Makes sure there are command line arguments
         return 0;
     }
@@ -76,6 +84,8 @@ int main(int argc, char *argv[]){
 
 
 printMap(boardX, boardY, plrX, plrY, goalX, goalY, monX, monY);
+
+
 return EXIT_SUCCESS;
 
 
