@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 /*
-int MonsterMove(int playerX, int playerY, int monsterX, int monsterY){
+int* MonsterMove(int playerX, int playerY, int monsterX, int monsterY){
 if((absVal(playerX - monsterX)) == absVal(playerY - monsterY)){
     //write thing to make random move here
     int r = rand() % 2;
