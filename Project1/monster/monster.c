@@ -73,8 +73,9 @@ printMap(boardX, boardY, plrX, plrY, goalX, goalY, monX, monY);
 return EXIT_SUCCESS;
 
 
-
-
-
-
+char current;
+    while (scanf("%c", current)!= EOF) 
+    {
+        /* code */
+    }
 }
