@@ -17,7 +17,7 @@ int random1(int seed){
     srand(seed);
     int r = rand();
     int answer = 0;
-    printf("%d \n", r);
+    //printf("%d \n", r);
     if(r > RAND_MAX/2){
         answer = 0;
         return answer;
@@ -92,15 +92,16 @@ else if((absVal(playerX - monsterX)) < absVal(playerY - monsterY)){
 if(!(newCords.layerX == goalX && newCords.layerY == goalY)){
 printf("monster moves ");
 printf("%c \n", direction);
-
+return newCords;
 
 
 }
 else{
     newCords.layerX = monsterX;
     newCords.layerY = monsterY;
-}
     return newCords;
+}
+
 
 }
 
@@ -196,12 +197,26 @@ char current;
 
         }
         if(isValidMove.moveValid){
-            printMap(boardX, boardY, plrX, plrY, goalX, goalY, monX, monY);
+            plrX = isValidMove.layerX;
+            plrY = isValidMove.layerY;
+            if(plrX == goalX && plrY == goalY){
+                printf("player wins! \n");
+                break;
+            }
+            if(plrX == monX && plrY == monY ){
+                printf("monster wins! \n");
+                break;
+            }
             isValidMove2 = MonsterMove(plrX, plrY, goalX, goalY, monX, monY);
             monX = isValidMove2.layerX;
             monY = isValidMove2.layerY;
-            plrX = isValidMove.layerX;
-            plrY = isValidMove.layerY;
+
+
+            if(plrX == monX && plrY == monY ){
+                printf("monster wins! \n");
+                break;
+            }
+            printMap(boardX, boardY, plrX, plrY, goalX, goalY, monX, monY);
             
             
             //printf("this ran \n");
