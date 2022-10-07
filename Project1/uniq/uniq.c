@@ -2,58 +2,39 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct node
+
+int main()
 {
-    char* line;
-    int freq;
-    struct node* next;
-};
-
-typedef struct node node_data;
-
-node_data *create_new_node(char* value){
-    node_data *result = malloc(sizeof(node_data));
-    result->line = value;
-    result->freq = 1;
-    result->next = NULL;
-    return result;
-}
-
-int main(int argc, char *argv[])
-{
-    node_data head = (struct node*)malloc(sizeof(struct node));
-    //very important this is how you should be declaring your nodes
-    //your nodes are technically a pointer to a pointer
-
-    node_data *ptr = head;
-    char line[100];
-    while (scanf("%s", line) != EOF) { //Reads in the string to search
-        if(head->next == NULL){
-            head->next = create_new_node(line);
-        }else{
-            int boolean = 0;
-            node_data* temp = head->next;
-            while (temp->next != NULL){
-                if(temp->next->line == line){
-                temp->next->freq++;
-                boolean = 1;
-                    break;
-                }
-                temp = temp->next;
-            }
-            if(boolean == 0)
-                ptr->next = create_new_node(line);
-            boolean = 0;
+    char current [100][100]; //current line
+    int apperiences[100]; //array of apperiences
+    int i = 0;
+    while(scanf("%s", current[i]) != EOF) {
+        if (i == 0)
+        {
+            apperiences[0] = 1;
+            i++;
+            continue;
         }
-        ptr = ptr->next;
-        printf("%c", ' '); 
+        if (apperiences[i] == 0)
+            apperiences[i] = 1;
+        
+        
+        
+            if (strcmp(current[i], current[i - 1]) == 0)  //string matches string before
+            {
+                apperiences[i-1]++;
+                apperiences[i] = 0;
+            }
+            else
+            {
+                i++;
+            }
+            
     }
-    //free(ptr);
-    while(head->next != NULL){
-        printf("%d",head->next->freq);
-        printf("%c", ' ');
-        printf("%s", head->next->line);
-        printf("%c", '\n');
+    for (int j = 0; j < i; j++)
+    {
+        printf("%d ", apperiences[j]);
+        printf("%s", current[j]);
+        printf("%c", '\n'); 
     }
-    //free(head);
 }
