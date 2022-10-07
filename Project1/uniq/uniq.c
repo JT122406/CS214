@@ -15,27 +15,21 @@ int main()
             i++;
             continue;
         }
-
-        for (int j = 0; j < i; j++)
-        {
-            if (strcmp(current[i], current[j]) == 0)
+        if (apperiences[i] == 0)
+            apperiences[i] = 1;
+        
+        
+        
+            if (strcmp(current[i], current[i - 1]) == 0)  //string matches string before
             {
-                if (apperiences[j] == 0)
-                {
-                apperiences[j] = 1;
-                }
-                else
-                    apperiences[j]++;
-                break;
+                apperiences[i-1]++;
+                apperiences[i] = 0;
             }
-            else if (j == i - 1)
+            else
             {
-                //word is not in array
-                apperiences[i] = 1;
                 i++;
-                break;
             }
-        }
+            
     }
     for (int j = 0; j < i; j++)
     {
