@@ -1,25 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-int* MonsterMove(int playerX, int playerY, int goalX, int goalY, int monsterX, int monsterY){
-int newCords [2] = {monsterX, monsterY};
-char direction = 'A';
-if((absVal(playerX - monsterX)) == absVal(playerY - monsterY)){
-    //write thing to make random move here
-    int r = random1(playerX + monsterY);
-    if(r == 1){
-        //move horizontal
-    }
-    else{
-        //move vertical
-    }
-
-
-}
-
-
-}
+struct PlayerMovement{
+    int layerX;
+    int layerY;
+    int moveValid;
+};
 
 int absVal(int x){
     return (x < 0) ? -x : x;
@@ -42,6 +28,78 @@ int random1(int seed){
     }
 }
 
+
+void MonsterMove(int playerX, int playerY, int goalX, int goalY, int monsterX, int monsterY){
+int newCords [2] = {monsterX, monsterY};
+char direction = 'A';
+if((absVal(playerX - monsterX)) == absVal(playerY - monsterY)){
+    //write thing to make random move here
+    int r = random1(playerX + monsterY);
+    if(r == 1){
+        //move horizontal
+        if(playerX - monsterX < 0){
+            direction = 'W';
+            newCords[0] = monsterX - 1;
+        }
+        else{
+            direction = 'E';
+            newCords[0] = monsterX + 1;
+        }
+    }
+    else{
+        //move vertical
+        if(playerY - monsterY < 0){
+            direction = 'S';
+            newCords[1] = monsterX - 1;
+        }
+        else{
+            direction = 'N';
+            newCords[1] = monsterX + 1;
+        }
+    }
+
+
+}
+
+else if((absVal(playerX - monsterX)) > absVal(playerY - monsterY)){
+
+        if(playerX - monsterX < 0){
+            direction = 'W';
+            newCords[0] = monsterX - 1;
+        }
+        else{
+            direction = 'E';
+            newCords[0] = monsterX + 1;
+        }
+
+}
+else if((absVal(playerX - monsterX)) < absVal(playerY - monsterY)){
+        if(playerY - monsterY < 0){
+            direction = 'S';
+            newCords[1] = monsterX - 1;
+        }
+        else{
+            direction = 'N';
+            newCords[1] = monsterX + 1;
+        }
+
+
+
+}
+
+if(!(newCords[0] == goalX && newCords[1] == goalY)){
+printf("monster moves ");
+printf("%c \n", direction);
+monsterX = newCords[0];
+monsterY = newCords[1];
+
+}
+
+
+}
+
+
+
 void printMap(int mapX, int mapY, int playerX, int playerY, int goalX, int goalY, int monsterX, int monsterY){
     for(int i = mapY - 1; i >= 0 ; i--){
         for(int j = 0; j < mapX; j++){
@@ -59,6 +117,46 @@ void printMap(int mapX, int mapY, int playerX, int playerY, int goalX, int goalY
     }
 
 }
+
+struct PlayerMovement PlayerMove(int mapX, int mapY, int playerX, int playerY, int goalX, int goalY, int monsterX, int monsterY, char direction){
+struct PlayerMovement newCords;
+newCords.layerX = playerX;
+newCords.layerY = playerY;
+newCords.moveValid = 0;
+
+if(direction == 'N'){
+    newCords.layerY = playerY + 1;
+} 
+if(direction == 'S'){
+    newCords.layerY = playerY - 1;
+}
+if(direction == 'E'){
+    newCords.layerX = playerX + 1;
+}
+if(direction == 'W'){
+    newCords.layerX = playerX - 1;
+}
+if(newCords.layerX >= mapX || newCords.layerX < 0 || newCords.layerY >= mapY || newCords.layerY < 0){
+    printf("invalid move \n");
+    newCords.moveValid = 0;
+    newCords.layerX = playerX;
+    newCords.layerY = playerY;
+    return newCords;
+}
+else{
+    //validMove = 1;
+    //playerX = newCords[0];
+    //playerY = newCords[1];
+    newCords.moveValid = 1;
+
+    return newCords;
+}
+
+
+
+}
+
+
 
 int main(int argc, char *argv[]){
     int gameEnd = 0;
@@ -80,12 +178,23 @@ int main(int argc, char *argv[]){
 printMap(boardX, boardY, plrX, plrY, goalX, goalY, monX, monY);
 
 
-return EXIT_SUCCESS;
-
+//return EXIT_SUCCESS;
+struct PlayerMovement isValidMove;
 
 char current;
-    while (scanf("%c", current)!= EOF) 
+    while (scanf("%c", &current)!= EOF) 
     {
-        /* code */
+        if(current == 'N' || current == 'S' || current == 'E' || current == 'W'){
+            isValidMove = PlayerMove(boardX, boardY, plrX, plrY, goalX, goalY, monX, monY, current);
+
+        }
+        if(isValidMove.moveValid){
+            plrX = isValidMove.layerX;
+            plrY = isValidMove.layerY;
+            printMap(boardX, boardY, plrX, plrY, goalX, goalY, monX, monY);
+            //printf("this ran \n");
+            isValidMove.moveValid = 0;
+        }
     }
+    return EXIT_SUCCESS;
 }
