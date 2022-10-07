@@ -30,6 +30,22 @@ void numeric(){  //called when doing a numeric sort
 }
 
 void alphabetical(){
+    char current [100][100]; //current line
+    int i = 0;
+    while (scanf("%s", current[i]) != EOF){  //simply reads in the lines
+        i++;
+    }
+    //now I need to sort but im lazy
+
+
+
+    for (int q = 0; q < i; q++)
+    {
+        printf("%s", current[q]);
+        printf("%c", '\n');
+    }
+    
+
 
 }
 
