@@ -29,20 +29,16 @@ void numeric(){  //called when doing a numeric sort
     }
 }
 
+void alphabetical(){
+
+}
+
 
 int main(int argc, char *argv[]){    
     if ((argv[1][0] == '-'  && (argv[1][1] == 'n')))
-    {
         numeric();
-    }  
-
-
-/*
-    char line[100];
-    while (scanf("%s", line) != EOF){
-
-    }
-
-*/
+    else
+        alphabetical();
+    return 0;
 }
 
