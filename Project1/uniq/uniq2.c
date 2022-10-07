@@ -11,14 +11,19 @@ int main()
     while(scanf("%s", current[i]) != EOF) {
         if (i == 0)
         {
+            apperiences[0] = 1;
             i++;
-            break;
+            continue;
         }
 
         for (int j = 0; j < i; j++)
         {
             if (strcmp(current[i], current[j]) == 0)
             {
+                if (apperiences[j] == 0)
+                {
+                apperiences[j] = 0;
+                }
                 apperiences[j]++;
                 break;
             }
