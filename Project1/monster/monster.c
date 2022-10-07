@@ -166,7 +166,7 @@ else{
 
 
 int main(int argc, char *argv[]){
-    int gameEnd = 0;
+    //int gameEnd = 0;
     if((argc < 8) || (*argv[1] == '\0')){  //Makes sure there are command line arguments
         return 0;
     }
