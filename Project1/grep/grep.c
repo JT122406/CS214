@@ -5,6 +5,9 @@
 int main(int argc, char *argv[]) {
     int caseSensetive = 0;
     char* search = argv[1]; //The string to search for and if we are case sensetive
+    if((argc < 2) || (*argv[1] == '\0')){  //Makes sure there is a string to search for
+        return 0;
+    }
     if (argv[1][0] == '-'  && argv[1][1] == 'i'){
             caseSensetive = 1;
             search = argv[2];
