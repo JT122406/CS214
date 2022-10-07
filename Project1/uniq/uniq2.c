@@ -22,13 +22,16 @@ int main()
             {
                 if (apperiences[j] == 0)
                 {
-                apperiences[j] = 0;
+                apperiences[j] = 1;
                 }
-                apperiences[j]++;
+                else
+                    apperiences[j]++;
                 break;
             }
             else if (j == i - 1)
             {
+                //word is not in array
+                apperiences[i] = 1;
                 i++;
                 break;
             }
