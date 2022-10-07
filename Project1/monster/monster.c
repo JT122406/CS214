@@ -29,8 +29,10 @@ int random1(int seed){
 }
 
 
-void MonsterMove(int playerX, int playerY, int goalX, int goalY, int monsterX, int monsterY){
-int newCords [2] = {monsterX, monsterY};
+struct PlayerMovement MonsterMove(int playerX, int playerY, int goalX, int goalY, int monsterX, int monsterY){
+struct PlayerMovement newCords;
+newCords.layerX = monsterX;
+newCords.layerY = monsterY;
 char direction = 'A';
 if((absVal(playerX - monsterX)) == absVal(playerY - monsterY)){
     //write thing to make random move here
@@ -39,22 +41,22 @@ if((absVal(playerX - monsterX)) == absVal(playerY - monsterY)){
         //move horizontal
         if(playerX - monsterX < 0){
             direction = 'W';
-            newCords[0] = monsterX - 1;
+            newCords.layerX = monsterX - 1;
         }
         else{
             direction = 'E';
-            newCords[0] = monsterX + 1;
+            newCords.layerX = monsterX + 1;
         }
     }
     else{
         //move vertical
         if(playerY - monsterY < 0){
             direction = 'S';
-            newCords[1] = monsterX - 1;
+            newCords.layerY = monsterY - 1;
         }
         else{
             direction = 'N';
-            newCords[1] = monsterX + 1;
+            newCords.layerY = monsterY + 1;
         }
     }
 
@@ -65,36 +67,40 @@ else if((absVal(playerX - monsterX)) > absVal(playerY - monsterY)){
 
         if(playerX - monsterX < 0){
             direction = 'W';
-            newCords[0] = monsterX - 1;
+            newCords.layerX = monsterX - 1;
         }
         else{
             direction = 'E';
-            newCords[0] = monsterX + 1;
+            newCords.layerX = monsterX + 1;
         }
 
 }
 else if((absVal(playerX - monsterX)) < absVal(playerY - monsterY)){
         if(playerY - monsterY < 0){
             direction = 'S';
-            newCords[1] = monsterX - 1;
+            newCords.layerY = monsterX - 1;
         }
         else{
             direction = 'N';
-            newCords[1] = monsterX + 1;
+            newCords.layerY = monsterX + 1;
         }
 
 
 
 }
 
-if(!(newCords[0] == goalX && newCords[1] == goalY)){
+if(!(newCords.layerX == goalX && newCords.layerY == goalY)){
 printf("monster moves ");
 printf("%c \n", direction);
-monsterX = newCords[0];
-monsterY = newCords[1];
+
+
 
 }
-
+else{
+    newCords.layerX = monsterX;
+    newCords.layerY = monsterY;
+}
+    return newCords;
 
 }
 
@@ -180,6 +186,7 @@ printMap(boardX, boardY, plrX, plrY, goalX, goalY, monX, monY);
 
 //return EXIT_SUCCESS;
 struct PlayerMovement isValidMove;
+struct PlayerMovement isValidMove2;
 
 char current;
     while (scanf("%c", &current)!= EOF) 
@@ -189,12 +196,19 @@ char current;
 
         }
         if(isValidMove.moveValid){
+            printMap(boardX, boardY, plrX, plrY, goalX, goalY, monX, monY);
+            isValidMove2 = MonsterMove(plrX, plrY, goalX, goalY, monX, monY);
+            monX = isValidMove2.layerX;
+            monY = isValidMove2.layerY;
             plrX = isValidMove.layerX;
             plrY = isValidMove.layerY;
-            printMap(boardX, boardY, plrX, plrY, goalX, goalY, monX, monY);
+            
+            
             //printf("this ran \n");
             isValidMove.moveValid = 0;
         }
     }
     return EXIT_SUCCESS;
 }
+//gets weird memory print when the monster wants to go on the goal, goes on the goal anyway 
+//also map prints out after move
