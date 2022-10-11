@@ -15,8 +15,8 @@ int main()
             i++;
             continue;
         }
-        if (apperiences[i] == 0)
-            apperiences[i] = 1;
+    if (apperiences[i] == 0)
+         apperiences[i] = 1;
         
         
         
