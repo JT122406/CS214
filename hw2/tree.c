@@ -13,5 +13,6 @@ while((entry = readdir(directory)) != NULL){
     printf("- %s\n", entry->d_name);
 }
 closedir(directory);
+//this is an addition
 return 0;
 }
