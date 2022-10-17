@@ -1,4 +1,6 @@
-
+#include <stdio.h>
+#include <dirent.h>
+#include <string.h>
 
 
 int main(int argc, char *argv[]){
@@ -9,6 +11,23 @@ int main(int argc, char *argv[]){
     {
         info= 1;
     }
+    else
+        return 0;
+
+
+    struct dirent *de;
+    DIR *dr = opendir(".");
+    while ((de = readdir(dr)) != NULL)
+    {
+        if (de->d_type == DT_REG)
+            {
+                printf("%s\n", de->d_name);
+            }
+    }
+            
+  
+    closedir(dr);    
+    return 0;
     
 
 }
