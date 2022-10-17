@@ -92,7 +92,7 @@ int main(int argc, char *argv[]){
             node_data *min_prev = head;
             while (current != NULL)
             {
-                if (strcmp(current->file->d_name, min->file->d_name) > 0)
+                if (strcmp(tolower(current->file->d_name), tolower(min->file->d_name)) > 0)
                 {
                     min = current;
                     min_prev = prev;
