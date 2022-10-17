@@ -3,6 +3,24 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <stdlib.h>
+
+
+struct node
+{
+    struct dirent *file;
+    struct node* next;
+};
+
+typedef struct node node_data;
+
+node_data *create_new_node(struct dirent *de){
+    node_data *result = malloc(sizeof(node_data));
+    result->file = de;
+    result->next = NULL;
+    return result;
+}
+
 
 char* month(int monthnum) {
     switch (monthnum) {
@@ -45,18 +63,56 @@ int main(int argc, char *argv[]){
     else
         return 0;
 
-
-    struct dirent *de;
+    
     DIR *dr = opendir(".");
+    struct dirent *de;
+    node_data *head = create_new_node(NULL);
+    node_data *current = head;
 
+    int count = 0;
     //Prints file names
-        while ((de = readdir(dr)) != NULL)
+        while ((de = readdir(dr)) != NULL)  //Linked List of nodes
         {
-            if (de->d_type == DT_REG)
+            if (de->d_type == DT_REG){
+                count++;
+                current->next = create_new_node(de);
+                current = current->next;
+            }    
+        }
+        closedir(dr);   
+
+
+        //now we should sort them
+        node_data *sorted = create_new_node(NULL);
+        while (head->next != NULL)
+        {
+            node_data *current = head->next;
+            node_data *prev = head;
+            node_data *min = head->next;
+            node_data *min_prev = head;
+            while (current != NULL)
+            {
+                if (strcmp(current->file->d_name, min->file->d_name) > 0)
                 {
-                    struct tm dt;
-                    if (info == 1)  //print file info before file name
+                    min = current;
+                    min_prev = prev;
+                }
+                prev = current;
+                current = current->next;
+            }
+            min_prev->next = min->next;
+            min->next = sorted->next;
+            sorted->next = min;
+        }
+    
+        
+
+        for (int i = 0; i < count; i++)  //Print Loop
+        {
+            sorted = sorted->next;
+            if (info == 1)  //print file info before file name
                     {
+                        struct tm dt;
                         struct stat buf;
                         stat(de->d_name, &buf);
                         //printf("%u ", buf.st_mode);
@@ -68,11 +124,11 @@ int main(int argc, char *argv[]){
 
                         printf(" %s %d %d:%d ", month(dt.tm_mon), dt.tm_mday,  dt.tm_hour, dt.tm_min);
                     }
-                    printf("%s\n", de->d_name);
-                }
+                    
+                    printf("%s\n", sorted->file->d_name);
+                    
         }
-            
-  
-    closedir(dr);    
-    return 0;
-}
+        free(head);
+        
+        return 0;
+    }
