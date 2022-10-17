@@ -114,7 +114,7 @@ int main(int argc, char *argv[]){
                     {
                         struct tm dt;
                         struct stat buf;
-                        stat(de->d_name, &buf);
+                        stat(sorted->file->d_name, &buf);
                         //printf("%u ", buf.st_mode);
                         //printf("%u ", buf.st_uid);
                         //printf("%ld ", buf.st_mtime);
