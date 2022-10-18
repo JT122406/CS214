@@ -4,6 +4,9 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <stdlib.h>
+#include <ctype.h>
+#include <pwd.h>
+#include <grp.h>
 
 
 struct node
@@ -24,29 +27,29 @@ node_data *create_new_node(struct dirent *de){
 
 char* month(int monthnum) {
     switch (monthnum) {
-        case 1:
+        case 0:
             return "Jan";
-        case 2:
+        case 1:
             return "Feb";
-        case 3:
+        case 2:
             return "Mar";
-        case 4:
+        case 3:
             return "Apr";
-        case 5:
+        case 4:
             return "May";
-        case 6:
+        case 5:
             return "Jun";
-        case 7:
+        case 6:
             return "Jul";
-        case 8:
+        case 7:
             return "Aug";
-        case 9:
+        case 8:
             return "Sep";
-        case 10:
+        case 9:
             return "Oct";
-        case 11:
+        case 10:
             return "Nov";
-        case 12:
+        case 11:
             return "Dec";
     }
 }
@@ -70,7 +73,6 @@ int main(int argc, char *argv[]){
     node_data *current = head;
 
     int count = 0;
-    //Prints file names
         while ((de = readdir(dr)) != NULL)  //Linked List of nodes
         {
             if (de->d_type == DT_REG){
@@ -92,7 +94,7 @@ int main(int argc, char *argv[]){
             node_data *min_prev = head;
             while (current != NULL)
             {
-                if (strcmp(tolower(current->file->d_name), tolower(min->file->d_name)) > 0)
+                if (strcmp(current->file->d_name, min->file->d_name) > 0)
                 {
                     min = current;
                     min_prev = prev;
@@ -116,7 +118,7 @@ int main(int argc, char *argv[]){
                         struct stat buf;
                         stat(sorted->file->d_name, &buf);
                         //printf("%u ", buf.st_mode);
-                        //printf("%u ", buf.st_uid);
+                        printf("%s %s ", getpwuid(buf.st_uid)->pw_name, getgrgid(buf.st_gid)->gr_name);
                         //printf("%ld ", buf.st_mtime);
                         printf("%ld ", buf.st_size);
                         //Time info
@@ -124,8 +126,7 @@ int main(int argc, char *argv[]){
 
                         printf(" %s %d %d:%d ", month(dt.tm_mon), dt.tm_mday,  dt.tm_hour, dt.tm_min);
                     }
-                    
-                    printf("%s\n", sorted->file->d_name);
+                printf("%s\n", sorted->file->d_name);
                     
         }
         free(head);
