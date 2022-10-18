@@ -1,40 +1,65 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <string.h>
-#include <sys/stat.h>
-#include <time.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <pwd.h>
-#include <grp.h>
 
-void searchdir(char* search, DIR *dr, char* currentdir){
+void searchdir(char* search, char* directory){
+        DIR *dr = opendir(directory); 
+        char newPath[1000];
+        if (!dr)
+        {
+            return;
+        }
+        
         struct dirent *de;
         while ((de = readdir(dr)) != NULL)  //Linked List of nodes
         {
+            
             if ((de->d_name[0] != '.'  || (de->d_name[1] == '.' && de->d_name[0] != '.' ))){
-                if (de->d_type == DT_REG )  //file
-                {
-                    printf("./%s", currentdir);
-                    printf("%s\n", de->d_name);
-                }
-            } else if (de->d_type == DT_DIR) //folder
-            {
-                searchdir(search, opendir(de->d_name), strcat(currentdir, strcat(de->d_name, "/")));
-            }
+                
+              
+                    if (strstr(de->d_name, search) != NULL)  //contains search string
+                    {
+                        printf("./%s", directory);
+                        printf("%s\n", de->d_name);
+                    }
+                    if (de->d_type != DT_REG)
+                    {
+                        if (directory[0] != '.')
+                            {
+                                strcpy(newPath, directory);
+                                strcat(newPath, de->d_name);
+                                strcat(newPath, "/");
+                            }
+                            else{  //first directory
+                                strcpy(newPath, de->d_name);
+                                strcat(newPath, "/");
+                            }
+                    
+                    
+                    //printf("\n%s\n", newPath);
+                    searchdir(search, newPath);
+                    }
+                    
+                    
+    
+            } 
+            
         }
-        closedir(dr); 
+        closedir(dr);
+         
 }
 
 
 int main(int argc, char *argv[]){
-        char* search = argv[1]; 
-        DIR *dr = opendir(".");
+        searchdir(argv[1], ".");
+        /*
         struct dirent *de;
         char* currentdir;
         while ((de = readdir(dr)) != NULL)  //Linked List of nodes
         {
-            if ((de->d_name[0] != '.'  || (de->d_name[1] == '.' && de->d_name[0] != '.' ))){
+            if ((de->d_name[0] != '.'  || ((strlen(de->d_name) >= 2)&&(de->d_name[1] == '.' && de->d_name[0] != '.' )))){
                 if (de->d_type == DT_REG)  //file
                 {
                     if (strstr(de->d_name, search) != NULL)  //contains search string
@@ -45,10 +70,11 @@ int main(int argc, char *argv[]){
                     
                 } else if (de->d_type == DT_DIR) //folder
                 {
-                    searchdir(search, dr, currentdir);
+                    searchdir(search, opendir(strcat("./",de->d_name)), currentdir);
                 }
             }
         }
-        closedir(dr);   
+        */
+        //closedir(dr);   
     return 0;
 }
