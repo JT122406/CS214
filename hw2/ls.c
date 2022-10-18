@@ -125,6 +125,18 @@ void printDate(struct stat buf){
     //printf(" %s %d %d:%d ", month(dt.tm_mon), dt.tm_mday,  dt.tm_hour, dt.tm_min);
 }
 
+void freeList(node_data* head)
+{
+   node_data* tmp;
+
+   while (head != NULL)
+    {
+       tmp = head;
+       head = head->next;
+       free(tmp);
+    }
+
+}
 
 int main(int argc, char *argv[]){
     int info;
@@ -132,13 +144,13 @@ int main(int argc, char *argv[]){
         info = 0;
     } else if (argv[1][0] == '-'  && argv[1][1] == 'l')
     {
-        info= 1;
+        info = 1;
     }
     else
         return 0;
 
     
-    DIR *dr = opendir(".");
+    DIR *dr = opendir(".");  //Opens current directory
     struct dirent *de;
     node_data *head = create_new_node(NULL);
     node_data *current = head;
@@ -152,6 +164,7 @@ int main(int argc, char *argv[]){
                 current = current->next;
             }
         }
+        free(de);
         closedir(dr);   
 
 
@@ -197,8 +210,8 @@ int main(int argc, char *argv[]){
                 printf("%s\n", sorted->file->d_name);
                     
         }
-        free(head);
+        freeList(head);
         free(current);
-        free(sorted);
+        freeList(sorted);
         return 0;
     }
