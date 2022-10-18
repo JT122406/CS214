@@ -2,7 +2,18 @@
 #include <dirent.h>
 #include <string.h>
 
+struct Node
+{
+char data[10000];
+int level;
+int isDir;
+struct Node *next;
+struct Node *root;
+};
+
 void tree(char *basePath, const int root);
+
+
 
 int main()
 {
