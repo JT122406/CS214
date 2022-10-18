@@ -8,7 +8,6 @@
 #include <pwd.h>
 #include <grp.h>
 
-
 struct node
 {
     struct dirent *file;
@@ -66,6 +65,7 @@ char* month(int monthnum) {
         case 11:
             return "Dec";
     }
+    return "Invalid month";
 }
 
 void readwrite(struct stat buf){
@@ -188,8 +188,6 @@ int main(int argc, char *argv[]){
                         struct stat buf;
                         if (sorted->file->d_type == DT_DIR)printf("d");
                         else printf("-");
-
-
                         stat(sorted->file->d_name, &buf);
                         readwrite(buf);
                         printf(" %s %s ", getpwuid(buf.st_uid)->pw_name, getgrgid(buf.st_gid)->gr_name);
@@ -202,6 +200,5 @@ int main(int argc, char *argv[]){
         free(head);
         free(current);
         free(sorted);
-        
         return 0;
     }
