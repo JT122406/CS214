@@ -143,7 +143,7 @@ int main(int argc, char *argv[]){
     node_data *head = create_new_node(NULL);
     node_data *current = head;
 
-    int count = 0;
+        int count = 0;
         while ((de = readdir(dr)) != NULL)  //Linked List of nodes
         {
             if ((de->d_type == DT_REG  || de->d_type == DT_DIR)  && (de->d_name[0] != '.'  || (de->d_name[1] == '.' && de->d_name[0] != '.' ))){
@@ -192,11 +192,8 @@ int main(int argc, char *argv[]){
 
                         stat(sorted->file->d_name, &buf);
                         readwrite(buf);
-                        //printf("%u ", buf.st_mode);
                         printf(" %s %s ", getpwuid(buf.st_uid)->pw_name, getgrgid(buf.st_gid)->gr_name);
-                        //printf("%ld ", buf.st_mtime);
                         printf("%ld", buf.st_size);
-                        //Time info
                         printDate(buf);
                     }
                 printf("%s\n", sorted->file->d_name);
