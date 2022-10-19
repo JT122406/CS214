@@ -156,7 +156,7 @@ void swap(node_data *a, node_data *b)
 /* Bubble sort the given linked list */
 void bubbleSort(node_data *start) 
 { 
-    int swapped, i; 
+    int swapped; 
     node_data *ptr1; 
     node_data *lptr = NULL; 
   
