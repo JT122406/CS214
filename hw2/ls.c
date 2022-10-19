@@ -138,6 +138,55 @@ void freeList(node_data* head)
 
 }
 
+
+ /* function to swap data of two nodes a and b*/
+void swap(node_data *a, node_data *b) 
+{
+    struct dirent *file = a->file;
+    //node_data* next = a->next;
+    char* name = a->name;
+    a->file = b->file;
+   // a->next = b->next;
+    a->name = b->name;
+    b->file = file;
+    //b->next = next;
+    b->name = name;
+} 
+  
+/* Bubble sort the given linked list */
+void bubbleSort(node_data *start) 
+{ 
+    int swapped, i; 
+    node_data *ptr1; 
+    node_data *lptr = NULL; 
+  
+    /* Checking for empty list */
+    if (start == NULL) 
+        return; 
+  
+    do
+    { 
+        swapped = 0; 
+        ptr1 = start; 
+  
+        while (ptr1->next != lptr) 
+        { 
+            if (strcmp(ptr1->name, ptr1->next->name) > 0) 
+            { 
+                swap(ptr1, ptr1->next); 
+                swapped = 1; 
+            } 
+            ptr1 = ptr1->next; 
+        } 
+        lptr = ptr1; 
+    } 
+    while (swapped); 
+} 
+  
+
+
+
+
 int main(int argc, char *argv[]){
     int info;
     if((argc < 2) || (*argv[1] == '\0')){  //Makes sure there is a string to search for
@@ -164,35 +213,33 @@ int main(int argc, char *argv[]){
                 current = current->next;
             }
         }
-        free(de);
+        //free(current);
         closedir(dr);   
 
-
+        bubbleSort(head->next);
+        node_data *temp = head;
         //now we should sort them
-        node_data *sorted = create_new_node(NULL);
-        while (head->next != NULL)
-        {
-            node_data *current = head->next;
-            node_data *prev = head;
-            node_data *min = head->next;
-            node_data *min_prev = head;
-            while (current != NULL)
-            {
-                if (strcmp(current->name, min->name) > 0)
-                {
-                    min = current;
-                    min_prev = prev;
-                }
-                prev = current;
-                current = current->next;
-            }
-            min_prev->next = min->next;
-            min->next = sorted->next;
-            sorted->next = min;
+
+        
+    while (temp->next !=  NULL){
+        temp = temp->next;
+        if (info == 1){
+                    if (temp->file->d_type == DT_DIR)printf("d");
+                    else printf("-");
+                    struct stat buf;
+                    stat(temp->file->d_name, &buf);
+                    readwrite(buf);
+                    printf(" %s %s ", getpwuid(buf.st_uid)->pw_name, getgrgid(buf.st_gid)->gr_name);
+                    printf("%ld", buf.st_size);
+                    printDate(buf);
         }
+        printf("%s\n", temp->file->d_name); 
+    }
+
+    freeList(head);
     
         
-
+/*
         for (int i = 0; i < count; i++)  //Print Loop
         {
             sorted = sorted->next;
@@ -211,7 +258,8 @@ int main(int argc, char *argv[]){
                     
         }
         freeList(head);
-        free(current);
         freeList(sorted);
+        freeList(sorted);
+        */
         return 0;
     }
