@@ -58,21 +58,33 @@ struct Node* create_node(){
     //head4->data2 = file;
     return head4;
 }
-/*
-void swap(struct Node* node1, struct Node* node2){
-    //struct Node* node1_next = node1->next;
-    //struct Node* node2_next = node2->next;
-    node1->next = node2->next;
-    node2->next = node1;
+
+void swap(struct Node* node1, struct Node* node2, struct Node* head){
+struct Node* temp = head;
+if(node1->next != node2){
+    return;
+}
+while(temp != NULL){
+    if(temp->next->data == node1->data){
+        temp->next = node2;
+        node1->next = node2->next;
+        node2->next = node1;
+        
+        break;
+    }
+    else{
+        temp = temp-> next;
+    }
+}
 }
 
-void bubbleSort(struct Node *start) 
+void bubbleSort(struct Node* start) 
 { 
     int swapped; 
-    struct Node *ptr1; 
-    struct Node *lptr = NULL; 
+    struct Node* ptr1; 
+    struct Node* lptr = NULL; 
   
-    Checking for empty list 
+    /* Checking for empty list */
     if (start->next == NULL) 
         return; 
   
@@ -80,16 +92,14 @@ void bubbleSort(struct Node *start)
     { 
         swapped = 0; 
         ptr1 = start->next; 
-        
+        if(ptr1->next == NULL)
+        return;
   
         while (ptr1->next != lptr) 
         { 
-            if(ptr1->isDir){
-                bubbleSort(ptr1->root);
-            }
             if (strcasecmp(ptr1->data, ptr1->next->data) > 0) 
             { 
-                swap(ptr1, ptr1->next); 
+                swap(ptr1, ptr1->next, start); 
                 swapped = 1; 
             } 
             ptr1 = ptr1->next; 
@@ -97,9 +107,9 @@ void bubbleSort(struct Node *start)
         lptr = ptr1; 
     } 
     while (swapped); 
-} 
+}
 
-*/
+
 
 
 
@@ -138,6 +148,8 @@ struct Node* next_next = create_node();
 */
     //bubbleSort(head);
     printf(".\n");
+    //swap(head->next, head->next->next, head);
+    //swap(head->next->next->next->next->next, head->next->next->next->next->next->next, head);
     print_Node(head->next);
     free_Node(head);
     
