@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
 
 void searchdir(char* search, char* directory){
         DIR *dr = opendir(directory); 
@@ -36,9 +34,6 @@ void searchdir(char* search, char* directory){
                                 strcpy(newPath, de->d_name);
                                 strcat(newPath, "/");
                             }
-                    
-                    
-                    //printf("\n%s\n", newPath);
                     searchdir(search, newPath);
                     }
                     
@@ -53,28 +48,11 @@ void searchdir(char* search, char* directory){
 
 
 int main(int argc, char *argv[]){
-        searchdir(argv[1], ".");
-        /*
-        struct dirent *de;
-        char* currentdir;
-        while ((de = readdir(dr)) != NULL)  //Linked List of nodes
-        {
-            if ((de->d_name[0] != '.'  || ((strlen(de->d_name) >= 2)&&(de->d_name[1] == '.' && de->d_name[0] != '.' )))){
-                if (de->d_type == DT_REG)  //file
-                {
-                    if (strstr(de->d_name, search) != NULL)  //contains search string
-                    {
-                        printf("./");
-                        printf("%s\n", de->d_name);
-                    }
-                    
-                } else if (de->d_type == DT_DIR) //folder
-                {
-                    searchdir(search, opendir(strcat("./",de->d_name)), currentdir);
-                }
-            }
-        }
-        */
-        //closedir(dr);   
+    if (argc < 2)
+    {
+        printf("No search string provided\n");
+        return 0;
+    }
+        searchdir(argv[1], ".");  
     return 0;
 }
