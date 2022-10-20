@@ -12,7 +12,6 @@ struct node
 {
     struct dirent *file;
     struct node* next;
-    char* name;
 };
 
 typedef struct node node_data;
@@ -21,19 +20,6 @@ node_data *create_new_node(struct dirent *de){
     node_data *result = malloc(sizeof(node_data));
     result->file = de;
     result->next = NULL;
-    if (de == NULL)
-    {
-        result->name = NULL;
-        return result;
-    }
-    
-    char* name = de->d_name;
-    int i = 0;
-    while(name[i]){
-        name[i] = tolower(name[i]);
-        i++;
-    }
-    result->name = name;
     return result;
 }
 
@@ -143,14 +129,8 @@ void freeList(node_data* head)
 void swap(node_data *a, node_data *b) 
 {
     struct dirent *file = a->file;
-    //node_data* next = a->next;
-    char* name = a->name;
     a->file = b->file;
-   // a->next = b->next;
-    a->name = b->name;
     b->file = file;
-    //b->next = next;
-    b->name = name;
 } 
   
 /* Bubble sort the given linked list */
@@ -171,7 +151,7 @@ void bubbleSort(node_data *start)
   
         while (ptr1->next != lptr) 
         { 
-            if (strcmp(ptr1->name, ptr1->next->name) > 0) 
+            if (strcasecmp(ptr1->file->d_name, ptr1->next->file->d_name) > 0) 
             { 
                 swap(ptr1, ptr1->next); 
                 swapped = 1; 
@@ -183,8 +163,6 @@ void bubbleSort(node_data *start)
     while (swapped); 
 } 
   
-
-
 
 
 int main(int argc, char *argv[]){
@@ -204,17 +182,15 @@ int main(int argc, char *argv[]){
     node_data *head = create_new_node(NULL);
     node_data *current = head;
 
-        int count = 0;
         while ((de = readdir(dr)) != NULL)  //Linked List of nodes
         {
             if ((de->d_type == DT_REG  || de->d_type == DT_DIR)  && (de->d_name[0] != '.'  || (de->d_name[1] == '.' && de->d_name[0] != '.' ))){
-                count++;
                 current->next = create_new_node(de);
                 current = current->next;
             }
         }
         //free(current);
-        closedir(dr);   
+          
 
         bubbleSort(head->next);
         node_data *temp = head;
@@ -236,30 +212,7 @@ int main(int argc, char *argv[]){
         printf("%s\n", temp->file->d_name); 
     }
 
+    closedir(dr); 
     freeList(head);
-    
-        
-/*
-        for (int i = 0; i < count; i++)  //Print Loop
-        {
-            sorted = sorted->next;
-            if (info == 1)  //print file info before file name
-                    {
-                        struct stat buf;
-                        if (sorted->file->d_type == DT_DIR)printf("d");
-                        else printf("-");
-                        stat(sorted->file->d_name, &buf);
-                        readwrite(buf);
-                        printf(" %s %s ", getpwuid(buf.st_uid)->pw_name, getgrgid(buf.st_gid)->gr_name);
-                        printf("%ld", buf.st_size);
-                        printDate(buf);
-                    }
-                printf("%s\n", sorted->file->d_name);
-                    
-        }
-        freeList(head);
-        freeList(sorted);
-        freeList(sorted);
-        */
-        return 0;
-    }
+    return 0;
+}
