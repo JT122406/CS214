@@ -4,7 +4,6 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <stdlib.h>
-#include <ctype.h>
 #include <pwd.h>
 #include <grp.h>
 
