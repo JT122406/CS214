@@ -60,37 +60,23 @@ struct Node* create_node(){
 }
 
 void swap(struct Node* node1,struct Node* node2){
-/*
-struct Node* temp = create_node();
-temp->next = node2->next;
-temp->root = node2->root;
-temp->isDir = node2->isDir;
-temp->level = node2->level;
-strcpy(temp->data, node2->data);
-node2->next = node1->next;
-node2->root = node1->root;
-node2->isDir = node1->isDir;
-node2->level = node1->level;
-strcpy(node2->data, node1->data);
-node1->next = temp->next;
-node1->root = temp->root;
-node1->isDir = temp->isDir;
-node1->level = temp->level;
-strcpy(node1->data, temp->data);
-temp->next = NULL;
-temp->root = NULL;
-free(temp);
 
-struct Node* temp = *node1;
-*node1 = *node2;
-*node2 = temp;
-*/
-//struct Node* temp = node2->next;
-//node1->next = temp;
+
 char temp_string[1000];
 strcpy(temp_string, node2->data);
 strcpy(node2->data,node1->data);
 strcpy(node1->data, temp_string);
+if(node1->isDir || node2->isDir){
+    int temp_int = node2->isDir;
+    node2->isDir = node1->isDir;
+    node1->isDir = temp_int;
+    struct Node* temp_node1 = node1->root;
+    struct Node* temp_node2 = node2->root;
+    node1->root = temp_node2;
+    node2->root = temp_node1;
+}
+
+
 
 }
 
