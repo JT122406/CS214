@@ -59,23 +59,39 @@ struct Node* create_node(){
     return head4;
 }
 
-void swap(struct Node* node1, struct Node* node2, struct Node* head){
-struct Node* temp = head;
-if(node1->next != node2){
-    return;
-}
-while(temp != NULL){
-    if(temp->next->data == node1->data){
-        temp->next = node2;
-        node1->next = node2->next;
-        node2->next = node1;
-        
-        break;
-    }
-    else{
-        temp = temp-> next;
-    }
-}
+void swap(struct Node* node1,struct Node* node2){
+/*
+struct Node* temp = create_node();
+temp->next = node2->next;
+temp->root = node2->root;
+temp->isDir = node2->isDir;
+temp->level = node2->level;
+strcpy(temp->data, node2->data);
+node2->next = node1->next;
+node2->root = node1->root;
+node2->isDir = node1->isDir;
+node2->level = node1->level;
+strcpy(node2->data, node1->data);
+node1->next = temp->next;
+node1->root = temp->root;
+node1->isDir = temp->isDir;
+node1->level = temp->level;
+strcpy(node1->data, temp->data);
+temp->next = NULL;
+temp->root = NULL;
+free(temp);
+
+struct Node* temp = *node1;
+*node1 = *node2;
+*node2 = temp;
+*/
+//struct Node* temp = node2->next;
+//node1->next = temp;
+char temp_string[1000];
+strcpy(temp_string, node2->data);
+strcpy(node2->data,node1->data);
+strcpy(node1->data, temp_string);
+
 }
 
 void bubbleSort(struct Node* start) 
@@ -85,23 +101,24 @@ void bubbleSort(struct Node* start)
     struct Node* lptr = NULL; 
   
     /* Checking for empty list */
-    if (start->next == NULL) 
+    if (start == NULL) 
         return; 
   
     do
     { 
         swapped = 0; 
-        ptr1 = start->next; 
-        if(ptr1->next == NULL)
-        return;
+        ptr1 = start; 
   
         while (ptr1->next != lptr) 
         { 
             if (strcasecmp(ptr1->data, ptr1->next->data) > 0) 
             { 
-                swap(ptr1, ptr1->next, start); 
+                swap(ptr1, ptr1->next); 
                 swapped = 1; 
             } 
+            if(ptr1->isDir){
+                bubbleSort(ptr1->root->next);
+            }
             ptr1 = ptr1->next; 
         } 
         lptr = ptr1; 
@@ -146,7 +163,7 @@ struct Node* next_next = create_node();
     //bext->isDir = 1;
     //struct Node* test = head;
 */
-    //bubbleSort(head);
+    bubbleSort(head->next);
     printf(".\n");
     //swap(head->next, head->next->next, head);
     //swap(head->next->next->next->next->next, head->next->next->next->next->next->next, head);
