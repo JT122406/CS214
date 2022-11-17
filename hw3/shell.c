@@ -8,11 +8,12 @@ char* readline(){
 }
 
 int main(){
-    
     do{
         printf("> ");
         char *line = readline();
         
+
+        free(line);
     }while(1);
     
     
