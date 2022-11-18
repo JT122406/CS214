@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 char* readline(){
     char *line = NULL;
@@ -12,7 +13,7 @@ int main(){
         printf("> ");
         char *line = readline();
         
-
+        //printf("> %s", line);
         free(line);
     }while(1);
     
