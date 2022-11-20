@@ -2,15 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-char* readline(){
-    char *line = NULL;
-    size_t len = 0;
-    if(getline(&line, &len, stdin)!= EOF){
-        return line;
-    }
-    return NULL;
-}
-
 int main(){
     //int i;
     //char *exit_stuff = "exit\n";
