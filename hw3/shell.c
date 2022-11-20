@@ -5,28 +5,27 @@
 char* readline(){
     char *line = NULL;
     size_t len = 0;
-    getline(&line, &len, stdin);
-    return line;
+    if(getline(&line, &len, stdin)!= EOF){
+        return line;
+    }
+    return NULL;
 }
 
 int main(){
-    int i;
-    char *exit_stuff = "exit\n";
+    //int i;
+    //char *exit_stuff = "exit\n";
     //int isExit = 1;
+    char *line = NULL;
     do{
         printf("> ");
-        char *line = readline();
-        if (!strcmp("exit\n", line)){
-            printf("this should exit\n");
-            free(line);
-            //very important check strings with a \n get line adds it to the end of a string
-            return 0;
-        }
-
-
+        size_t len = 0;
+        if(getline(&line, &len, stdin) == EOF  || !strcmp("exit\n", line))
+            break;
+         //very important check strings with a \n get line adds it to the end of a string
         printf("%s", line);
         free(line);
     }while(1);
-    
+    free(line);
+    return 0;
     
 }
