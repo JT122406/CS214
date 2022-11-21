@@ -8,20 +8,18 @@ int main(){
     //char *exit_stuff = "exit\n";
     //int isExit = 1;
     char *line = NULL;
-    char *dir = NULL;
-    getcwd(&dir, 1024);
+    char dir[1044];
+    getcwd(dir, 1024);
+    printf("%s", dir);
     do{
         printf("> ");
         size_t len = 0;
-        if(getline(&line, &len, stdin) == EOF  || !strcmp("exit\n", line))
+        if(getline(&line, &len, stdin) == EOF  || !strcmp("exit\n", line)  || strstr(line, "exit ") != NULL)
             break;
          //very important check strings with a \n get line adds it to the end of a string
 
-        if (strstr(*line, "cd") != NULL)
-        {
-            
-        }
-         
+       
+
         printf("%s", line);
         free(line);
     }while(1);
