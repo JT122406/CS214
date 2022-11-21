@@ -3,7 +3,6 @@
 #include <string.h>
 #include <unistd.h>
 
-
 char *remove_white_spaces_before(char *str)
 {
 	int i = 0, j = 0;
@@ -25,26 +24,19 @@ char *remove_white_spaces_before(char *str)
 char *remove_cd_white(char *str)
 {
 	int i = 0, j = 0;
-    //int boolean = 0;
 	while (str[i])
 	{
-		if (((str[i] != ' ') && (str[i] != 'c' )&& (str[i] != 'd'))){
+		if (((str[i] != ' ') && (str[i] != 'c' )&& (str[i] != 'd')))
             str[j++] = str[i];
-            //boolean = 1;
-        }
+        
 		i++;
 	}
 	str[j] = '\0';
-    //str[i - 1] = '\0';
-    //str[i - 2] = '\0';
 	return str;
 }
 
 
 int main(){
-    //int i;
-    //char *exit_stuff = "exit\n";
-    //int isExit = 1;
     char *line = NULL;
     char dir[1044];
     getcwd(dir, 1024);
@@ -57,20 +49,13 @@ int main(){
         line[strcspn(line, "\n")] = '\0';
         remove_white_spaces_before(line);
         if (strstr(line, "cd ") != NULL){
-                remove_cd_white(line);
-                //printf("%s", line);
-                chdir(line);
-                getcwd(dir, 1024);
-                printf("%s", dir);
-                free(line);
-                continue;
-        
+            remove_cd_white(line);  
+            chdir(line);
+            getcwd(dir, 1024);
+            printf("%s", dir);
+            free(line);
             continue;
         }
-            
-
-
-        //printf("%s", line);
         free(line);
     }while(1);
     free(line);
