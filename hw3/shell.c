@@ -110,6 +110,27 @@ void cd_handler(char *line){
     printf("%s", dir);
 }
 
+void command_handler(char *line){
+
+}
+
+void jobs_handler(){
+
+}
+
+void kill_handler(char *line){
+
+}
+
+void fg_handler(char *line){
+
+}
+
+void bg_handler(char *line){
+
+}
+
+
 
 int main(){
     char *line = NULL;
@@ -117,8 +138,6 @@ int main(){
     do{
         size_t len = 0;
         printf("> ");
-
-        
         
         if(getline(&line, &len, stdin) == EOF || !strcmp("exit\n", line) || strstr(line, "exit ") != NULL || strstr(line, " exit") != NULL)  //Exit Handler
             break;
@@ -129,21 +148,23 @@ int main(){
         if (strstr(line, "cd ") != NULL){  //handles cd command
             cd_handler(line);
         } else if (strstr(line, "bg ") != NULL){  //handles bg command
-
+            bg_handler(line);
         } else if (strstr(line, "fg ") != NULL){  //handles fg command
-
+            fg_handler(line);
         } else if (strstr(line, "jobs") != NULL)  {//handles jobs command
-       
+            jobs_handler();
         } else if (strstr(line, "kill ") != NULL){  //handles kill command
-
-        }/*else{  //running tasks
+            kill_handler(line);
+        }else{  //running tasks
+            command_handler(line);
+            /*
             pid_t pid;
             if((pid = fork()) == 0) execvp(line, stringsplit(line, number_of_arguments(line)));
 
             int status = 0;
-            while ((pid = wait(&status)) > 0);
+            while ((pid = wait(&status)) > 0);*/
         }
-*/
+
 
     free(line);
     }while(1);
