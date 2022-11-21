@@ -4,6 +4,9 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+
+char dir[1044];
+
 struct Node {
 struct Node *next;
 struct Node *child;
@@ -11,6 +14,7 @@ int proc_id;
 int sys_id;
 int status;
 int arg_num;
+int is_backround;
 char **arguments;
 //gonna have to fix the two dimensional array no work good in C in struct
 };
@@ -38,7 +42,6 @@ struct Node* create_node(int proc, int sys, int stat, int args){
     head->arg_num = args;
     head->arguments = malloc((sizeof(*head->arguments)) * args);
     return head;
-    
 }
 
 char *remove_white_spaces_before(char *str)
@@ -72,38 +75,74 @@ char *remove_cd_white(char *str)
 	str[j] = '\0';
 	return str;
 }
+int number_of_arguments(char *string){
+    int count = 0;
+    for(int i = 0; string[i] != '\0'; i++){
+        if(string[i] == ' ' && string[i+1] != ' ')
+        count++;
+    }
+    return count++;
+}
+
+char** stringsplit(char* string, int argv){
+    number_of_arguments(string);
+    char** args = malloc(sizeof(char*) * argv);
+    int i = 0;
+    char* token = strtok(string, " ");
+    while(token != NULL){
+        args[i] = token;
+        token = strtok(NULL, " ");
+        i++;
+    }
+    return args;
+}
+
+void free_array(char** array, int argv){
+    for(int i = 0; i < argv; i++){
+        free(array[i]);
+    }
+}
+
+void cd_handler(char *line){
+    remove_cd_white(line);  
+    chdir(line);
+    getcwd(dir, 1024);
+    printf("%s", dir);
+}
 
 
 int main(){
     char *line = NULL;
-    char dir[1044];
     getcwd(dir, 1024);
     do{
         size_t len = 0;
         printf("> ");
-        if(getline(&line, &len, stdin) == EOF || !strcmp("exit\n", line) || strstr(line, "exit ") != NULL)
+
+        
+        
+        if(getline(&line, &len, stdin) == EOF || !strcmp("exit\n", line) || strstr(line, "exit ") != NULL || strstr(line, " exit") != NULL)  //Exit Handler
             break;
-         //very important check strings with a \n get line adds it to the end of a string
+
         line[strcspn(line, "\n")] = '\0';
         remove_white_spaces_before(line);
+        
         if (strstr(line, "cd ") != NULL){  //handles cd command
-            remove_cd_white(line);  
-            chdir(line);
-            getcwd(dir, 1024);
-            printf("%s", dir);
-            free(line);
-            continue;
-        }  //Handle everything not cd out here
-        char* argument_list[] = {"ls", "-l", NULL};
-        pid_t pid;
-        if((pid = fork()) == 0) execvp(line, argument_list);
+            cd_handler(line);
+        }
+        /*
+        else{  //commands
+            pid_t pid;
+            if((pid = fork()) == 0) execvp(line, stringsplit(line, number_of_arguments(line)));
 
-        int status = 0;
-        while ((pid = wait(&status)) > 0);
+            int status = 0;
+            while ((pid = wait(&status)) > 0);
+        }
+*/
+
         free(line);
     }while(1);
     free(line);
-    printf('\n');
+    printf("\n");
     return 0;
     
 }
