@@ -128,9 +128,15 @@ int main(){
         
         if (strstr(line, "cd ") != NULL){  //handles cd command
             cd_handler(line);
-        }
-        /*
-        else{  //commands
+        } else if (strstr(line, "bg ") != NULL){  //handles bg command
+
+        } else if (strstr(line, "fg ") != NULL){  //handles fg command
+
+        } else if (strstr(line, "jobs") != NULL)  {//handles jobs command
+       
+        } else if (strstr(line, "kill ") != NULL){  //handles kill command
+
+        }/*else{  //running tasks
             pid_t pid;
             if((pid = fork()) == 0) execvp(line, stringsplit(line, number_of_arguments(line)));
 
@@ -139,7 +145,7 @@ int main(){
         }
 */
 
-        free(line);
+    free(line);
     }while(1);
     free(line);
     printf("\n");
