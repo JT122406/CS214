@@ -76,12 +76,14 @@ char *remove_cd_white(char *str)
 	return str;
 }
 int number_of_arguments(char *string){
-    int count = 0;
-    for(int i = 0; string[i] != '\0'; i++){
-        if(string[i] == ' ' && string[i+1] != ' ')
-        count++;
+    int count = 1; //Always at least one argument
+    for(int i = 0; (string[i] != '\0'); i++){
+        if(string[i] == ' ' && string[i+1] != ' '){
+            count++;
+            i++;  //we know the next one is starting the word so we can skip it
+        }
     }
-    return count++;
+    return count;
 }
 
 char** stringsplit(char* string, int argv){
@@ -111,7 +113,16 @@ void cd_handler(char *line){
 }
 
 void command_handler(char *line){
-
+    int argv = number_of_arguments(line);
+    char** args = stringsplit(line, argv);
+    int pid = fork();
+    if(pid == 0){
+        execvp(args[0], args);
+        exit(0);
+    }
+    else{
+        wait(NULL);
+    }
 }
 
 void jobs_handler(){
@@ -157,12 +168,6 @@ int main(){
             kill_handler(line);
         }else{  //running tasks
             command_handler(line);
-            /*
-            pid_t pid;
-            if((pid = fork()) == 0) execvp(line, stringsplit(line, number_of_arguments(line)));
-
-            int status = 0;
-            while ((pid = wait(&status)) > 0);*/
         }
 
 
