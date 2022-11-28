@@ -116,6 +116,9 @@ void cd_handler(char *line){
 void command_handler(char *line){
     int arguments = number_of_arguments(line);
     char** args = malloc(arguments * sizeof(char*));
+    for(int i = 0; i < arguments; i++ ){
+        args[i] = (char *)malloc(sizeof(char)*100); 
+    }
     stringsplit(line, arguments,  args);
     if(fork() == 0){
         if (execvp(args[0], args) < 0){
