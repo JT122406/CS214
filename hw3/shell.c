@@ -116,8 +116,7 @@ void cd_handler(char *line){
 }
 
 void command_handler(char *line){
-    int argv = number_of_arguments(line);
-    char** args = stringsplit(line, argv);
+    char** args = stringsplit(line, number_of_arguments(line));
     int pid = fork();
     if(pid == 0){
         execvp(args[0], args);
@@ -126,7 +125,6 @@ void command_handler(char *line){
     else{
         wait(NULL);
     }
-
 }
 
 void jobs_handler(){
