@@ -67,7 +67,7 @@ char *remove_cd_white(char *str)
 	int i = 0, j = 0;
 	while (str[i])
 	{
-		if (((str[i] != ' ') && (str[i] != 'c' )&& (str[i] != 'd')))
+		if (((str[i] != ' ') && (str[i] != 'c' ) && (str[i] != 'd')))
             str[j++] = str[i];
         
 		i++;
@@ -84,21 +84,19 @@ int number_of_arguments(char *string){
             i++;  //we know the next one is starting the word so we can skip it
         }
     }
-    printf("%d" ,count);
-    printf("\n");
     return count;
 }
 
-char** stringsplit(char* string, int argv){
-    char** args = malloc(argv * sizeof(char*));
+char** stringsplit(char* string, int argv, char** save){
     int i = 0;
     char* token = strtok(string, " ");
     while(token != NULL){
-        args[i] = token;
+        save[i] = token;
         token = strtok(NULL, " ");
         i++;
     }
-    return args;
+    free(token);
+    return save;
 }
 
 void free_array(char** array, int argv){
@@ -116,10 +114,12 @@ void cd_handler(char *line){
 }
 
 void command_handler(char *line){
-    char** args = stringsplit(line, number_of_arguments(line));
-    int pid = fork();
-    if(pid == 0){
+    int arguments = number_of_arguments(line);
+    char** args = malloc(arguments * sizeof(char*));
+    stringsplit(line, arguments,  args);
+    if(fork() == 0){
         execvp(args[0], args);
+        free_array(args, arguments);
         exit(0);
     }
     else{
