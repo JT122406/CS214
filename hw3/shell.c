@@ -75,6 +75,7 @@ char *remove_cd_white(char *str)
 	str[j] = '\0';
 	return str;
 }
+
 int number_of_arguments(char *string){
     int count = 1; //Always at least one argument
     for(int i = 0; (string[i + 1] != '\0'); i++){
@@ -83,12 +84,13 @@ int number_of_arguments(char *string){
             i++;  //we know the next one is starting the word so we can skip it
         }
     }
+    printf("%d" ,count);
+    printf("\n");
     return count;
 }
 
 char** stringsplit(char* string, int argv){
-    number_of_arguments(string);
-    char** args = malloc(sizeof(char*) * argv);
+    char** args = malloc(argv * sizeof(char*));
     int i = 0;
     char* token = strtok(string, " ");
     while(token != NULL){
@@ -103,6 +105,7 @@ void free_array(char** array, int argv){
     for(int i = 0; i < argv; i++){
         free(array[i]);
     }
+    free(array);
 }
 
 void cd_handler(char *line){
@@ -123,6 +126,7 @@ void command_handler(char *line){
     else{
         wait(NULL);
     }
+
 }
 
 void jobs_handler(){
