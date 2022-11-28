@@ -113,6 +113,26 @@ void cd_handler(char *line){
     printf("%s", dir);
 }
 
+void run_command(char** args){
+    pid_t pid = fork();  //fork
+    //fork fails ->
+    if (pid == -1)
+    {
+        return;
+    }
+    else if (pid == 0)
+    {
+        if (execvp(args[0], args) < 0){
+            printf("%s", args[0]);
+            printf( ": command not found\n");
+        } 
+        exit(0);
+    } else {  //Wait for process to finish
+        wait(NULL);
+        return;
+    }
+}
+
 void command_handler(char *line){
     int arguments = number_of_arguments(line);
     char** args = malloc(arguments * sizeof(char*));
@@ -120,19 +140,10 @@ void command_handler(char *line){
         args[i] = (char *)malloc(sizeof(char)*100); 
     }
     stringsplit(line, arguments,  args);
-    if(fork() == 0){
-        if (execvp(args[0], args) < 0){
-            printf("%s", args[0]);
-            printf( ": command not found");
-            printf("\n");
-        }
-        free_array(args, arguments);
-        exit(0);
-    }
-    else{
-        wait(NULL);
-    }
+    run_command(args);
 }
+
+
 
 void jobs_handler(){
 
