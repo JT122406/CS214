@@ -7,6 +7,13 @@
 
 char dir[1044];
 
+void free_array(char** array, int argv){
+    for(int i = 0; i < argv; i++){
+        free(array[i]);
+    }
+    free(array);
+}
+
 struct Node {
 struct Node *next;
 struct Node *child;
@@ -99,13 +106,6 @@ char** stringsplit(char* string, int argv, char** save){
     return save;
 }
 
-void free_array(char** array, int argv){
-    for(int i = 0; i < argv; i++){
-        free(array[i]);
-    }
-    free(array);
-}
-
 void cd_handler(char *line){
     remove_cd_white(line);  
     chdir(line);
@@ -118,7 +118,11 @@ void command_handler(char *line){
     char** args = malloc(arguments * sizeof(char*));
     stringsplit(line, arguments,  args);
     if(fork() == 0){
-        execvp(args[0], args);
+        if (execvp(args[0], args) < 0){
+            printf("%s", args[0]);
+            printf( ": command not found");
+            printf("\n");
+        }
         free_array(args, arguments);
         exit(0);
     }
