@@ -12,3 +12,5 @@ Project1/.vscode/
 .vscode
 hw1/README.md
 Project1/hw1/README.md
+#don't commit the compiled file
+hw3/shell
