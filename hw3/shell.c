@@ -136,9 +136,6 @@ void run_command(char** args){
 void command_handler(char *line){
     int arguments = number_of_arguments(line);
     char** args = malloc(arguments * sizeof(char*));
-    for(int i = 0; i < arguments; i++ ){
-        args[i] = (char *)malloc(sizeof(char)*100); 
-    }
     stringsplit(line, arguments,  args);
     run_command(args);
 }
