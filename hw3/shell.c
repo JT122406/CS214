@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <ctype.h>
 
 
 char dir[1044];
@@ -57,11 +58,10 @@ char *remove_white_spaces_before(char *str)
     int boolean = 0;
 	while (str[i])
 	{
-		if (str[i] != ' ' || boolean){
+		if (!isspace(str[i]) || boolean){
             str[j++] = str[i];
             boolean = 1;
-        }
-          
+        } 
 		i++;
 	}
 	str[j] = '\0';
@@ -74,7 +74,7 @@ char *remove_cd_white(char *str)
 	int i = 0, j = 0;
 	while (str[i])
 	{
-		if (((str[i] != ' ') && (str[i] != 'c' ) && (str[i] != 'd')))
+		if (((!isspace(str[i])) && (str[i] != 'c' ) && (str[i] != 'd')))
             str[j++] = str[i];
         
 		i++;
@@ -86,7 +86,7 @@ char *remove_cd_white(char *str)
 int number_of_arguments(char *string){
     int count = 1; //Always at least one argument
     for(int i = 0; (string[i + 1] != '\0'); i++){
-        if(string[i] == ' ' && string[i+1] != ' '){
+        if(isspace(string[i]) && !isspace(string[i+1]) ){
             count++;
             i++;  //we know the next one is starting the word so we can skip it
         }
