@@ -7,6 +7,7 @@
 
 
 char dir[1044];
+int process = 0;
 
 void free_array(char** array, int argv){
     for(int i = 0; i < argv; i++){
@@ -115,6 +116,7 @@ void cd_handler(char *line){
 
 void run_command(char** args){
     pid_t pid = fork();  //fork
+    process++;
     //fork fails ->
     if (pid == -1)
     {
@@ -147,7 +149,17 @@ void jobs_handler(){
 }
 
 void kill_handler(char *line){
-
+    if (process == 0)
+    {
+        printf("No processes running");
+        return;
+    }
+    
+    char* args[2];
+    stringsplit(line, 2,  args);
+    printf("[%d] ", process);
+    printf( "%s ", args[1]);
+    printf("terminated by signal 2\n");
 }
 
 void fg_handler(char *line){
