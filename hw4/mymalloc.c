@@ -4,7 +4,20 @@
 
 
 void myinit(int allocAlg){
-
+    switch (allocAlg)
+    {
+    case 0:  //first fit
+        /* code */
+        break;
+    case 1:  //next fit
+        /* code */
+        break;
+    case 2:  //best fit
+        /* code */
+        break;
+    default:
+        break;
+    }
 }
 
 
