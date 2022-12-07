@@ -22,16 +22,34 @@ void myinit(int allocAlg){
 
 
 void* mymalloc(size_t size){
-
+    if (size == 0)
+        return NULL;  //Return Null
+    
 }
 
 
 void myfree(void* ptr){
+    if (ptr == NULL)
+        return;  //Do nothing
+    
 
 }
 
 
 void* myrealloc(void* ptr, size_t size){
+    if (ptr == NULL && size == 0)
+        return NULL;  //Return Null
+    else if (ptr == NULL)
+    {
+        mymalloc(size);
+        return;
+    }else if(size == 0)
+    {
+        myfree(ptr);
+        return;
+    }
+    
+    
 
 }
 
