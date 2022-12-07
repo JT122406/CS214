@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define CAPICITY 1000000
+
+char heap[CAPICITY] = {0};
 
 
 void myinit(int allocAlg){
