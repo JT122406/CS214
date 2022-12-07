@@ -1,12 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-#define CAPICITY 1000000
+#define CAPICITY 125000
 
 char heap[CAPICITY] = {0};
 
 int allocType = 0;
 
+struct pointers
+{
+    bool isFree;
+    void* ptr;
+};
+
+typedef struct pointers pointers;
 
 void myinit(int allocAlg){
     switch (allocAlg)
@@ -30,9 +38,9 @@ void myinit(int allocAlg){
 
 
 void* mymalloc(size_t size){
-    if (size == 0)
+    if (size == 0 || size > CAPICITY)
         return NULL;  //Return Null
-    
+
 }
 
 
