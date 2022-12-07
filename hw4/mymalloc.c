@@ -5,18 +5,23 @@
 
 char heap[CAPICITY] = {0};
 
+int allocType = 0;
+
 
 void myinit(int allocAlg){
     switch (allocAlg)
     {
     case 0:  //first fit
         /* code */
+        allocType = 0;
         break;
     case 1:  //next fit
         /* code */
+        allocType = 1;
         break;
     case 2:  //best fit
         /* code */
+        allocType = 2;
         break;
     default:
         break;
