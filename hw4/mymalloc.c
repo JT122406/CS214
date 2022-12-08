@@ -14,6 +14,12 @@ struct pointers
     void* ptr;
 };
 
+struct mem_buffer{
+    struct mem_buffer *next;
+    struct mem_buffer *next;
+    char *buffer;
+};
+
 typedef struct pointers pointers;
 
 void myinit(int allocAlg){
