@@ -15,14 +15,34 @@ struct pointers
     void* ptr;
 };
 
+typedef struct pointers pointers;
+
+pointers *createPointers(bool isFree, void* ptr){
+    pointers *new = malloc(sizeof(pointers));
+    new->isFree = isFree;
+    new->ptr = ptr;
+    return new;
+}
+
 struct mem_buffer{
     struct mem_buffer *next;
-    struct mem_buffer *next;
+    struct mem_buffer *prev;
     int size;
     char *buffer;
 };
 
-typedef struct pointers pointers;
+typedef struct mem_buffer mem_buffer;
+
+mem_buffer *createmem_buffer(int nodes){
+    mem_buffer *new = malloc(sizeof(mem_buffer));
+    new->size = nodes;
+    new->buffer = (char*)malloc(nodes);
+    new->next = NULL;
+    new->prev = NULL;
+    return new;
+}
+
+
 
 void myinit(int allocAlg){
     switch (allocAlg)
