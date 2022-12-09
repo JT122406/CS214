@@ -2,12 +2,14 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include "mymalloc.h"
 
 #define CAPICITY 125000
 
 char heap[CAPICITY] = {0};
 
 int allocType = 0;
+int actual_size = 0;
 /*
 struct pointers
 {
@@ -43,6 +45,8 @@ mem_buffer *createmem_buffer(int nodes){
 }
 */
 mem_buffer *FreeList;
+mem_buffer *Current;
+
 unsigned char BigBuffer[CAPICITY];
 
 
@@ -113,11 +117,45 @@ void* begining(int nodes){
 
 
 void* mymalloc(size_t size){
-    int totalSize = ceil(size/8);  //total in heap to allocate for
-    if (size == 0 || totalSize > CAPICITY)
-        return NULL;  //Return Null
-    else
-        return(begining(totalSize));
+    if(size = 0)
+    return NULL;
+    actual_size = size;
+    if(size % 8)
+    actual_size = size + (size % 8); 
+    if(allocType == 0){
+        Current = FreeList;
+        while(Current != NULL){
+            if(Current->size >= actual_size){
+                if(Current->size == actual_size){
+                    Current->prev->next = Current->next;
+                    Current->next->prev = Current->prev;
+                    return Current->buffer;
+                    //if the size is the exact same as the free space
+                    //you take the space out of the free list but it does not need to be split up
+                }
+                else{
+                    //This splits the current block into a new smaller one that maintains connectivity with the rest of the list
+                    //in future implement check to see if the remaining space is large enough
+                    //to handle the buffer and at least 8 bytes of data
+                    mem_buffer *New_one;
+                    New_one->next = Current->next;
+                    New_one->prev = Current->prev;
+                    New_one->size = Current->size - actual_size;
+                    New_one->buffer =(unsigned char*)(Current->buffer + actual_size + sizeof(mem_buffer));
+                    Current->size = actual_size;
+                    if(Current->prev != NULL)
+                    Current->prev->next = New_one;
+                    if(Current->next != NULL)
+                    Current->next->prev = New_one;
+                    return Current->buffer;
+                }
+            }
+        Current = Current->next;
+        }
+        return NULL;
+    }
+    if(allocType == 1){}
+    if(allocType == 2){}
 }
 
 
