@@ -8,7 +8,7 @@
 char heap[CAPICITY] = {0};
 
 int allocType = 0;
-
+/*
 struct pointers
 {
     bool isFree;
@@ -23,16 +23,16 @@ pointers *createPointers(bool isFree, void* ptr){
     new->ptr = ptr;
     return new;
 }
-
+*/
 struct mem_buffer{
     struct mem_buffer *next;
     struct mem_buffer *prev;
     int size;
-    char *buffer;
+   unsigned char *buffer;
 };
 
 typedef struct mem_buffer mem_buffer;
-
+/*
 mem_buffer *createmem_buffer(int nodes){
     mem_buffer *new = malloc(sizeof(mem_buffer));
     new->size = nodes;
@@ -41,10 +41,17 @@ mem_buffer *createmem_buffer(int nodes){
     new->prev = NULL;
     return new;
 }
-
+*/
+mem_buffer *FreeList;
+unsigned char BigBuffer[CAPICITY];
 
 
 void myinit(int allocAlg){
+    FreeList = (mem_buffer *)BigBuffer;
+    FreeList->next = NULL;
+    FreeList->prev = NULL;
+    FreeList->size = sizeof(BigBuffer) - sizeof(mem_buffer);
+    FreeList->buffer = (unsigned char*)(BigBuffer + sizeof(mem_buffer));
     switch (allocAlg)
     {
     case 0:  //first fit
