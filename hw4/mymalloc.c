@@ -6,26 +6,9 @@
 
 #define CAPICITY 125000
 
-char heap[CAPICITY] = {0};
-
 int allocType = 0;
 int actual_size = 0;
-/*
-struct pointers
-{
-    bool isFree;
-    void* ptr;
-};
 
-typedef struct pointers pointers;
-
-pointers *createPointers(bool isFree, void* ptr){
-    pointers *new = malloc(sizeof(pointers));
-    new->isFree = isFree;
-    new->ptr = ptr;
-    return new;
-}
-*/
 struct mem_buffer{
     struct mem_buffer *next;
     struct mem_buffer *prev;
@@ -34,16 +17,7 @@ struct mem_buffer{
 };
 
 typedef struct mem_buffer mem_buffer;
-/*
-mem_buffer *createmem_buffer(int nodes){
-    mem_buffer *new = malloc(sizeof(mem_buffer));
-    new->size = nodes;
-    new->buffer = (char*)malloc(nodes);
-    new->next = NULL;
-    new->prev = NULL;
-    return new;
-}
-*/
+
 mem_buffer *FreeList;
 mem_buffer *Current;
 
@@ -59,62 +33,19 @@ void myinit(int allocAlg){
     switch (allocAlg)
     {
     case 0:  //first fit
-        /* code */
         allocType = 0;
         break;
     case 1:  //next fit
-        /* code */
         allocType = 1;
         break;
     case 2:  //best fit
-        /* code */
         allocType = 2;
         break;
     default:
         break;
     }
 }
-/*
-void* begining(int nodes){
-    switch (allocType)
-    {
-    case 0:  //first fit (Linear Search)
-        for (int i = 0; i < CAPICITY; i++)
-        {
-            if (heap[i] == 0)
-                for (int j = 0; j < nodes; j++)
-                {
-                    if (heap[1+j] != 0)
-                    {
-                        i +=j;
-                        break;
-                    }
-                    if (j == nodes-1)
-                    {
-                        for (int k = 0; k < nodes; k++)  //mark them as allocated
-                        {
-                            heap[i+k] = 1;
-                        }
-                        return &heap[i];  //return pointer to the first node
-                    }
-                }
-            
-        }
-        return NULL;  //Return Null
-        break;
-    case 1:  //next fit
-        
-        
-        break;
-    case 2:  //best fit
-        
-        
-        break;
-    default:
-        break;
-    }
-}
-*/
+
 
 void* mymalloc(size_t size){
     if(size = 0)
@@ -122,7 +53,7 @@ void* mymalloc(size_t size){
 
     actual_size = size;
     if(size % 8)
-    actual_size = size + (size % 8); 
+        actual_size = size + (size % 8); 
     switch (allocType)
     {
     case 0:
@@ -189,12 +120,20 @@ void* myrealloc(void* ptr, size_t size){
         myfree(ptr);
         return;
     }
-    
-    
-
 }
 
 
 void mycleanup(){
-
+    while (FreeList != NULL)
+    {
+        free(FreeList->prev);
+        FreeList = FreeList->next;
+    }
+    free(FreeList);
+    while (Current != NULL)
+    {
+        free(Current->prev);
+        Current = Current->next;
+    }
+    free(Current);
 }
