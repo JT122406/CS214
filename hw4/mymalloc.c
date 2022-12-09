@@ -74,7 +74,7 @@ void myinit(int allocAlg){
         break;
     }
 }
-
+/*
 void* begining(int nodes){
     switch (allocType)
     {
@@ -114,7 +114,7 @@ void* begining(int nodes){
         break;
     }
 }
-
+*/
 
 void* mymalloc(size_t size){
     if(size = 0)
@@ -137,10 +137,12 @@ void* mymalloc(size_t size){
                     //This splits the current block into a new smaller one that maintains connectivity with the rest of the list
                     //in future implement check to see if the remaining space is large enough
                     //to handle the buffer and at least 8 bytes of data
+                    //to do that you should check to see if the remaining space is larger than sizeof(mem_buffer) + 8
+                    //if not keep that memory with the block being allocated
                     mem_buffer *New_one;
                     New_one->next = Current->next;
                     New_one->prev = Current->prev;
-                    New_one->size = Current->size - actual_size;
+                    New_one->size = Current->size - actual_size - sizeof(mem_buffer);
                     New_one->buffer =(unsigned char*)(Current->buffer + actual_size + sizeof(mem_buffer));
                     Current->size = actual_size;
                     if(Current->prev != NULL)
