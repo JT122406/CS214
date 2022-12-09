@@ -118,11 +118,14 @@ void* begining(int nodes){
 
 void* mymalloc(size_t size){
     if(size = 0)
-    return NULL;
+        return NULL;
+
     actual_size = size;
     if(size % 8)
     actual_size = size + (size % 8); 
-    if(allocType == 0){
+    switch (allocType)
+    {
+    case 0:
         Current = FreeList;
         while(Current != NULL){
             if(Current->size >= actual_size){
@@ -155,9 +158,14 @@ void* mymalloc(size_t size){
         Current = Current->next;
         }
         return NULL;
+        break;
+    case 1:
+            
+        break;
+    case 2:
+                
+        break;
     }
-    if(allocType == 1){}
-    if(allocType == 2){}
 }
 
 
