@@ -10,10 +10,10 @@ int allocType = 0;
 int actual_size = 0;
 
 struct mem_buffer{
-    struct mem_buffer *next;
-    struct mem_buffer *prev;
-    int size;
-   unsigned char *buffer;
+    struct mem_buffer *next;  //pointer to next block of memory allocated
+    struct mem_buffer *prev;  //pointer to previous block of memory allocated
+    int size;  //size of the block of memory allocated
+    unsigned char *buffer;  //pointer to the block of memory allocated
 };
 
 typedef struct mem_buffer mem_buffer;
@@ -23,40 +23,20 @@ mem_buffer *Current;
 
 unsigned char BigBuffer[CAPICITY];
 
-
-void myinit(int allocAlg){
-    FreeList = (mem_buffer *)BigBuffer;
-    FreeList->next = NULL;
-    FreeList->prev = NULL;
-    FreeList->size = sizeof(BigBuffer) - sizeof(mem_buffer);
-    FreeList->buffer = (unsigned char*)(BigBuffer + sizeof(mem_buffer));
-    switch (allocAlg)
-    {
-    case 0:  //first fit
-        allocType = 0;
-        break;
-    case 1:  //next fit
-        allocType = 1;
-        break;
-    case 2:  //best fit
-        allocType = 2;
-        break;
-    default:
-        break;
-    }
+void createList(){
+    FreeList = (mem_buffer *)BigBuffer;  //Creates the list
+    FreeList->next = NULL;  //Sets the next pointer to null
+    FreeList->prev = NULL;  //Sets the previous pointer to null
+    FreeList->size = sizeof(BigBuffer) - sizeof(mem_buffer);  //Sets the size of the whole buffer as free
+    FreeList->buffer = (unsigned char*)(BigBuffer + sizeof(mem_buffer));  //point to whole buffer
 }
 
+void myinit(int allocAlg){
+    createList();
+    allocType = allocAlg;
+}
 
-void* mymalloc(size_t size){
-    if(size = 0)
-        return NULL;
-
-    actual_size = size;
-    if(size % 8)
-        actual_size = size + (size % 8); 
-    switch (allocType)
-    {
-    case 0:
+void* firstFit(int actual_size){
         Current = FreeList;
         while(Current != NULL){
             if(Current->size >= actual_size){
@@ -89,13 +69,34 @@ void* mymalloc(size_t size){
         Current = Current->next;
         }
         return NULL;
-        break;
+}
+
+void* nextFit(int actual_size){
+    return NULL;
+}
+
+void* bestFit(int actual_size){
+    return NULL;
+}
+
+
+void* mymalloc(size_t size){
+    if(size = 0)
+        return NULL;
+
+    actual_size = size;
+    if(size % 8)
+        actual_size = size + (size % 8); 
+
+
+    switch (allocType)
+    {
+    case 0:
+        return firstFit(actual_size);
     case 1:
-            
-        break;
+        return nextFit(actual_size);
     case 2:
-                
-        break;
+        return bestFit(actual_size);
     }
 }
 
