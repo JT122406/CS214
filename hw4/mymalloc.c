@@ -37,10 +37,28 @@ void myinit(int allocAlg){
     printf("size of bigbuff: %p\n", BigBuffer);
 }
 
+mem_buffer* addNode(mem_buffer *node, mem_buffer *node2){
+    if (node->prev != NULL)
+        node->prev->next = node2->next;
+    if (node->next != NULL)
+        node->next->prev = node2->prev;
+    return node2;
+}
+
+mem_buffer* addNode(mem_buffer *node, mem_buffer *node2){
+    if (node->prev != NULL)
+        node->prev->next = node2->next;
+    if (node->next != NULL)
+        node->next->prev = node2->prev;
+    return node2;
+}
+
 void* firstFit(int actual_size){
         printf("made it to the first one\n");
         Current = FreeList;
         printf("made it to the second one\n");
+    Current = FreeList;
+
 
     while(Current != NULL){
         printf("made it to the third one\n");
@@ -48,11 +66,14 @@ void* firstFit(int actual_size){
                     printf("made it to the fourth one\n");
 
                     if(Current->size == actual_size){  
+                        //addNode(Current, Current);
+
+
                         if (Current->prev != NULL)
                             Current->prev->next = Current->next;
                         if (Current->next != NULL)
                             Current->next->prev = Current->prev;
-                            
+
                         return Current->buffer;
                         //if the size is the exact same as the free space
                         //you take the space out of the free list but it does not need to be split up
@@ -71,6 +92,8 @@ void* firstFit(int actual_size){
                         New_one->buffer =(unsigned char*)(Current->buffer + actual_size + sizeof(mem_buffer));
                         Current->size = actual_size;
 
+                        //addNode(Current, New_one);
+
                         if(Current->prev != NULL)  //If first node in list
                             Current->prev->next = New_one;
                         if(Current->next != NULL)  //If last node in list
@@ -87,11 +110,28 @@ void* firstFit(int actual_size){
 }
 
 void* nextFit(int actual_size){
+    Current = FreeList;
     return NULL;
 }
 
 void* bestFit(int actual_size){
-    return NULL;
+    Current = FreeList;
+    mem_buffer *tempnode = NULL;
+    while(Current != NULL){
+    if (actual_size <= Current->size)
+        if ((tempnode==NULL) || tempnode->size > Current->size)
+            tempnode = Current;
+    }
+    
+    mem_buffer *New_one = NULL;
+    //This splits the current block into a new smaller one that maintains connectivity with the rest of the list
+
+/*
+    addNode(Current, New_one);
+    New_one->buffer = (unsigned char*)(Current->buffer + actual_size + sizeof(mem_buffer));
+    Current->buffer = (unsigned char*)(Current->buffer - actual_size - sizeof(mem_buffer));
+    return New_one->buffer;
+    */
 }
 
 
