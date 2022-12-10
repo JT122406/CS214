@@ -88,8 +88,8 @@ void* firstFit(int actual_size){
                            }
 
                         }
-                        printf("This is Dumb: %d", ThisisDumb);
-                        New_one = (mem_buffer *)&BigBuffer[72 + 32];
+                        //printf("This is Dumb: %d", ThisisDumb);
+                        New_one = (mem_buffer *)&BigBuffer[ThisisDumb + actual_size + sizeof(mem_buffer)];
                         //New_one = (mem_buffer *)(Current + (Current->size - actual_size));
                         //New_one = (mem_buffer *)&Current + (Current->size - actual_size);
                         printf("pointer to bigBuff[0]: %p\n", &BigBuffer[0]);
