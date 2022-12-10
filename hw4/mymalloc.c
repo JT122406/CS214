@@ -8,6 +8,7 @@
 
 int allocType = 0;
 int actual_size = 0;
+int ThisisDumb = 0;
 
 struct mem_buffer{
     struct mem_buffer *next;  //pointer to next block of memory allocated
@@ -79,9 +80,21 @@ void* firstFit(int actual_size){
                         //to handle the buffer and at least 8 bytes of data
                         //to do that you should check to see if the remaining space is larger than sizeof(mem_buffer) + 8
                         //if not keep that memory with the block being allocated
-                        New_one = (mem_buffer *)BigBuffer;
+                        
+                        for(int i = 0; i < CAPICITY; i ++){
+                           if(&Current == &BigBuffer[i]){
+                            ThisisDumb = i;
+                            break;
+                           }
+
+                        }
+                        printf("This is Dumb: %d", ThisisDumb);
+                        New_one = (mem_buffer *)&BigBuffer[72 + 32];
                         //New_one = (mem_buffer *)(Current + (Current->size - actual_size));
                         //New_one = (mem_buffer *)&Current + (Current->size - actual_size);
+                        printf("pointer to bigBuff[0]: %p\n", &BigBuffer[0]);
+                        printf("pointer to bigBuff[125000]: %p\n", &BigBuffer[125000]);
+                        printf("pointer to current: %p\n", Current);
                         printf("made it fifth one");
                         New_one->next = Current->next;
                         New_one->prev = Current->prev;
@@ -98,7 +111,7 @@ void* firstFit(int actual_size){
                             Current->prev->next = New_one;
                         if(Current->next != NULL)  //If last node in list
                             Current->next->prev = New_one;
-
+                        FreeList = New_one;
                         return New_one->buffer;  //Pointer to buffer
                     }
 
