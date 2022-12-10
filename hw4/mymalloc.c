@@ -20,6 +20,7 @@ typedef struct mem_buffer mem_buffer;
 
 mem_buffer *FreeList;
 mem_buffer *Current;
+mem_buffer *New_one;
 
 static unsigned char BigBuffer[CAPICITY];
 
@@ -72,17 +73,23 @@ void* firstFit(int actual_size){
                         //you take the space out of the free list but it does not need to be split up
                     }
                     else{
-                        mem_buffer *New_one = NULL;
+                        //mem_buffer *New_one = Current;
                         //This splits the current block into a new smaller one that maintains connectivity with the rest of the list
                         //in future implement check to see if the remaining space is large enough
                         //to handle the buffer and at least 8 bytes of data
                         //to do that you should check to see if the remaining space is larger than sizeof(mem_buffer) + 8
                         //if not keep that memory with the block being allocated
+                        New_one = (mem_buffer *)BigBuffer;
+                        //New_one = (mem_buffer *)(Current + (Current->size - actual_size));
+                        //New_one = (mem_buffer *)&Current + (Current->size - actual_size);
+                        printf("made it fifth one");
                         New_one->next = Current->next;
                         New_one->prev = Current->prev;
-
+                        printf("made it sixth one");
                         New_one->size = Current->size - actual_size - sizeof(mem_buffer);
+                        printf("made it seventh one");
                         New_one->buffer =(unsigned char*)(Current->buffer + actual_size + sizeof(mem_buffer));
+                        printf("made it eight one\n");
                         Current->size = actual_size;
 
                         //addNode(Current, New_one);
@@ -134,7 +141,7 @@ void* mymalloc(size_t size){
 
     actual_size = size;
     if(size % 8)
-        actual_size = size + (size % 8); 
+        actual_size = size + (8-(size % 8)); 
 
 
     switch (allocType)

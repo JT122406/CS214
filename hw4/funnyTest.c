@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 	 * must be first call in the program
 	 */
 	myinit(0);
-    int* test = mymalloc(124968);
+    int* test = mymalloc(69);
     //mymalloc(200);
     PrintFreeList();
 
