@@ -49,16 +49,16 @@ mem_buffer* addNode(mem_buffer *node, mem_buffer *node2){
 
 
 void* firstFit(int actual_size){
-        printf("made it to the first one\n");
+        //printf("made it to the first one\n");
         Current = FreeList;
-        printf("made it to the second one\n");
+        //printf("made it to the second one\n");
     Current = FreeList;
 
 
     while(Current != NULL){
-        printf("made it to the third one\n");
+        //printf("made it to the third one\n");
                 if(Current->size >= actual_size){
-                    printf("made it to the fourth one\n");
+                    //printf("made it to the fourth one\n");
 
                     if(Current->size == actual_size){  
                         //addNode(Current, Current);
@@ -92,26 +92,27 @@ void* firstFit(int actual_size){
                         New_one = (mem_buffer *)&BigBuffer[ThisisDumb + actual_size + sizeof(mem_buffer)];
                         //New_one = (mem_buffer *)(Current + (Current->size - actual_size));
                         //New_one = (mem_buffer *)&Current + (Current->size - actual_size);
-                        printf("pointer to bigBuff[0]: %p\n", &BigBuffer[0]);
-                        printf("pointer to bigBuff[125000]: %p\n", &BigBuffer[125000]);
-                        printf("pointer to current: %p\n", Current);
-                        printf("made it fifth one");
+                        //printf("pointer to bigBuff[0]: %p\n", &BigBuffer[0]);
+                        //printf("pointer to bigBuff[125000]: %p\n", &BigBuffer[125000]);
+                        //printf("pointer to current: %p\n", Current);
+                        //printf("made it fifth one");
                         New_one->next = Current->next;
                         New_one->prev = Current->prev;
-                        printf("made it sixth one");
+                        //printf("made it sixth one");
                         New_one->size = Current->size - actual_size - sizeof(mem_buffer);
-                        printf("made it seventh one");
+                        //printf("made it seventh one");
                         New_one->buffer =(unsigned char*)(Current->buffer + actual_size + sizeof(mem_buffer));
-                        printf("made it eight one\n");
+                        //printf("made it eight one\n");
                         Current->size = actual_size;
 
                         //addNode(Current, New_one);
-
+                        if(Current->prev == NULL && Current->next == NULL)
+                            FreeList = New_one;
                         if(Current->prev != NULL)  //If first node in list
                             Current->prev->next = New_one;
                         if(Current->next != NULL)  //If last node in list
                             Current->next->prev = New_one;
-                        FreeList = New_one;
+                        
                         return New_one->buffer;  //Pointer to buffer
                     }
 

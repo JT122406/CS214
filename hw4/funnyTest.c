@@ -14,7 +14,18 @@ int main(int argc, char *argv[])
 	 */
 	myinit(0);
     int* test = mymalloc(69);
+	PrintFreeList();
+	char*array = mymalloc(10);
     //mymalloc(200);
+	for(int i=0; i < 9; i++)
+	{
+		array[i] = 'a' + i;
+	}
+	array[9] = 0;
+
+	printf("here is my nifty new string: %s\n",array);	
+
+
     PrintFreeList();
 
 	/*array = MyMalloc(10);
