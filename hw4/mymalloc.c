@@ -45,13 +45,6 @@ mem_buffer* addNode(mem_buffer *node, mem_buffer *node2){
     return node2;
 }
 
-mem_buffer* addNode(mem_buffer *node, mem_buffer *node2){
-    if (node->prev != NULL)
-        node->prev->next = node2->next;
-    if (node->next != NULL)
-        node->next->prev = node2->prev;
-    return node2;
-}
 
 void* firstFit(int actual_size){
         printf("made it to the first one\n");
