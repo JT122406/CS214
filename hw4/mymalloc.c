@@ -87,7 +87,7 @@ void* firstFit(int actual_size){
                         if(Current->next != NULL)  //If last node in list
                             Current->next->prev = New_one;
 
-                        return Current->buffer;  //Pointer to buffer
+                        return New_one->buffer;  //Pointer to buffer
                     }
 
                 }
@@ -111,7 +111,26 @@ void* bestFit(int actual_size){
             tempnode = Current;
     }
     
-    mem_buffer *New_one = NULL;
+    if (tempnode != NULL)
+    {
+        if (tempnode->size == actual_size)  //Perfect fit
+        {
+            if (tempnode->prev != NULL)
+                tempnode->prev->next = tempnode->next;
+            if (tempnode->next != NULL)
+                tempnode->next->prev = tempnode->prev;
+            return tempnode->buffer;
+        }
+        else
+        {
+            mem_buffer *New_one = NULL;
+        }   
+    }
+
+
+
+    return NULL;
+    
     //This splits the current block into a new smaller one that maintains connectivity with the rest of the list
 
 /*
