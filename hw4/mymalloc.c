@@ -38,37 +38,50 @@ void myinit(int allocAlg){
 
 void* firstFit(int actual_size){
         Current = FreeList;
-        while(Current != NULL){
-            if(Current->size >= actual_size){
-                if(Current->size == actual_size){
-                    Current->prev->next = Current->next;
-                    Current->next->prev = Current->prev;
-                    return Current->buffer;
-                    //if the size is the exact same as the free space
-                    //you take the space out of the free list but it does not need to be split up
+
+
+    while(Current != NULL){
+
+                if(Current->size >= actual_size){
+                    
+
+                    if(Current->size == actual_size){  
+                        if (Current->prev != NULL)
+                            Current->prev->next = Current->next;
+                        if (Current->next != NULL)
+                            Current->next->prev = Current->prev;
+                            
+                        return Current->buffer;
+                        //if the size is the exact same as the free space
+                        //you take the space out of the free list but it does not need to be split up
+                    }
+                    else{
+                        mem_buffer *New_one = NULL;
+                        //This splits the current block into a new smaller one that maintains connectivity with the rest of the list
+                        //in future implement check to see if the remaining space is large enough
+                        //to handle the buffer and at least 8 bytes of data
+                        //to do that you should check to see if the remaining space is larger than sizeof(mem_buffer) + 8
+                        //if not keep that memory with the block being allocated
+                        New_one->next = Current->next;
+                        New_one->prev = Current->prev;
+
+                        New_one->size = Current->size - actual_size - sizeof(mem_buffer);
+                        New_one->buffer =(unsigned char*)(Current->buffer + actual_size + sizeof(mem_buffer));
+                        Current->size = actual_size;
+
+                        if(Current->prev != NULL)  //If first node in list
+                            Current->prev->next = New_one;
+                        if(Current->next != NULL)  //If last node in list
+                            Current->next->prev = New_one;
+
+                        return Current->buffer;  //Pointer to buffer
+                    }
+
                 }
-                else{
-                    //This splits the current block into a new smaller one that maintains connectivity with the rest of the list
-                    //in future implement check to see if the remaining space is large enough
-                    //to handle the buffer and at least 8 bytes of data
-                    //to do that you should check to see if the remaining space is larger than sizeof(mem_buffer) + 8
-                    //if not keep that memory with the block being allocated
-                    mem_buffer *New_one;
-                    New_one->next = Current->next;
-                    New_one->prev = Current->prev;
-                    New_one->size = Current->size - actual_size - sizeof(mem_buffer);
-                    New_one->buffer =(unsigned char*)(Current->buffer + actual_size + sizeof(mem_buffer));
-                    Current->size = actual_size;
-                    if(Current->prev != NULL)
-                    Current->prev->next = New_one;
-                    if(Current->next != NULL)
-                    Current->next->prev = New_one;
-                    return Current->buffer;
-                }
-            }
         Current = Current->next;
-        }
-        return NULL;
+
+    }
+    return NULL;
 }
 
 void* nextFit(int actual_size){
@@ -81,7 +94,7 @@ void* bestFit(int actual_size){
 
 
 void* mymalloc(size_t size){
-    if(size = 0)
+    if(size == 0  || size > CAPICITY)
         return NULL;
 
     actual_size = size;
@@ -98,6 +111,7 @@ void* mymalloc(size_t size){
     case 2:
         return bestFit(actual_size);
     }
+    return NULL;
 }
 
 
