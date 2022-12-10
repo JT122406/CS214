@@ -62,7 +62,8 @@ void* firstFit(int actual_size){
 
                     if(Current->size == actual_size){  
                         //addNode(Current, Current);
-
+                        if(Current->prev == NULL && Current->next == NULL)
+                            FreeList = NULL;
 
                         if (Current->prev != NULL)
                             Current->prev->next = Current->next;
@@ -194,7 +195,6 @@ void myfree(void* ptr){
     if (ptr == NULL)
         return;  //Do nothing
     
-
 }
 
 
