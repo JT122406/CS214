@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
-#include "mymalloc.h"
+//#include "mymalloc.h"
 
 #define CAPICITY 125000
 
@@ -21,7 +21,7 @@ typedef struct mem_buffer mem_buffer;
 mem_buffer *FreeList;
 mem_buffer *Current;
 
-unsigned char BigBuffer[CAPICITY];
+static unsigned char BigBuffer[CAPICITY];
 
 void createList(){
     FreeList = (mem_buffer *)BigBuffer;  //Creates the list
@@ -34,6 +34,7 @@ void createList(){
 void myinit(int allocAlg){
     createList();
     allocType = allocAlg;
+    printf("size of bigbuff: %p\n", BigBuffer);
 }
 
 mem_buffer* addNode(mem_buffer *node, mem_buffer *node2){
@@ -44,14 +45,18 @@ mem_buffer* addNode(mem_buffer *node, mem_buffer *node2){
     return node2;
 }
 
+
 void* firstFit(int actual_size){
+        printf("made it to the first one\n");
+        Current = FreeList;
+        printf("made it to the second one\n");
     Current = FreeList;
 
 
     while(Current != NULL){
-
+        printf("made it to the third one\n");
                 if(Current->size >= actual_size){
-                    
+                    printf("made it to the fourth one\n");
 
                     if(Current->size == actual_size){  
                         //addNode(Current, Current);
@@ -200,4 +205,18 @@ void mycleanup(){
         Current = Current->next;
     }
     free(Current);
+}
+
+void PrintFreeList(){
+    Current = FreeList;
+    while(Current != NULL){
+        printf("block: %p\n", Current);
+        printf("size: %d\n",Current->size);
+        printf("next: %p\n", Current->next);
+        printf("prev: %p\n", Current->prev);
+        printf("buffer: %p\n", Current->buffer);
+        Current = Current->next;
+
+
+    }
 }
