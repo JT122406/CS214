@@ -14,6 +14,7 @@ struct mem_buffer{
     struct mem_buffer *next;  //pointer to next block of memory allocated
     struct mem_buffer *prev;  //pointer to previous block of memory allocated
     int size;  //size of the block of memory allocated
+    char status;  //status of the block of memory allocated
     unsigned char *buffer;  //pointer to the block of memory allocated
 };
 
@@ -30,8 +31,9 @@ void createList(){
     FreeList = (mem_buffer *)BigBuffer;  //Creates the list
     FreeList->next = NULL;  //Sets the next pointer to null
     FreeList->prev = NULL;  //Sets the previous pointer to null
-    FreeList->size = sizeof(BigBuffer) - sizeof(mem_buffer);  //Sets the size of the whole buffer as free
+    FreeList->size = CAPICITY - sizeof(mem_buffer);  //Sets the size of the whole buffer as free
     FreeList->buffer = (unsigned char*)(BigBuffer + sizeof(mem_buffer));  //point to whole buffer
+    FreeList->status = '0';  //Sets the status to free
 }
 
 void myinit(int allocAlg){
@@ -40,87 +42,43 @@ void myinit(int allocAlg){
     printf("size of bigbuff: %p\n", BigBuffer);
 }
 
-mem_buffer* addNode(mem_buffer *node, mem_buffer *node2){
-    if (node->prev != NULL)
-        node->prev->next = node2->next;
-    if (node->next != NULL)
-        node->next->prev = node2->prev;
-    return node2;
+
+
+void split(mem_buffer *Current, int actual_size){
+    if(Current->size-actual_size<=sizeof(mem_buffer)){
+        //if the remaining space is too small to handle the buffer and at least 8 bytes of data
+        //then keep that memory with the block being allocated
+        return;
+    }
+    mem_buffer *New_one = (void*) (Current + 1) + actual_size;
+    New_one->size =    Current->size - actual_size - sizeof(mem_buffer);
+    Current->size = actual_size;
+    New_one->status = '0';
+    New_one->buffer = (void*) (New_one + 1);
+    New_one->next = Current->next;
+    New_one->prev = Current;
+    if(Current->next)
+        New_one->next->prev = New_one;
+    Current->next = New_one;
+
 }
 
 
+
+
 void* firstFit(int actual_size){
-        //printf("made it to the first one\n");
-        Current = FreeList;
-        //printf("made it to the second one\n");
-    Current = FreeList;
-
-
-    while(Current != NULL){
-        //printf("made it to the third one\n");
-                if(Current->size >= actual_size){
-                    //printf("made it to the fourth one\n");
-
-                    if(Current->size == actual_size){  
-                        //addNode(Current, Current);
-                        if(Current->prev == NULL && Current->next == NULL)
-                            FreeList = NULL;
-
-                        if (Current->prev != NULL)
-                            Current->prev->next = Current->next;
-                        if (Current->next != NULL)
-                            Current->next->prev = Current->prev;
-
-                        return Current->buffer;
-                        //if the size is the exact same as the free space
-                        //you take the space out of the free list but it does not need to be split up
-                    }
-                    else{
-                        //mem_buffer *New_one = Current;
-                        //This splits the current block into a new smaller one that maintains connectivity with the rest of the list
-                        //in future implement check to see if the remaining space is large enough
-                        //to handle the buffer and at least 8 bytes of data
-                        //to do that you should check to see if the remaining space is larger than sizeof(mem_buffer) + 8
-                        //if not keep that memory with the block being allocated
-                        
-                        for(int i = 0; i < CAPICITY; i ++){
-                           if(&Current == &BigBuffer[i]){
-                            ThisisDumb = i;
-                            break;
-                           }
-
-                        }
-                        //printf("This is Dumb: %d", ThisisDumb);
-                        New_one = (mem_buffer *)&BigBuffer[ThisisDumb + actual_size + sizeof(mem_buffer)];
-                        //New_one = (mem_buffer *)(Current + (Current->size - actual_size));
-                        //New_one = (mem_buffer *)&Current + (Current->size - actual_size);
-                        //printf("pointer to bigBuff[0]: %p\n", &BigBuffer[0]);
-                        //printf("pointer to bigBuff[125000]: %p\n", &BigBuffer[125000]);
-                        //printf("pointer to current: %p\n", Current);
-                        //printf("made it fifth one");
-                        New_one->next = Current->next;
-                        New_one->prev = Current->prev;
-                        //printf("made it sixth one");
-                        New_one->size = Current->size - actual_size - sizeof(mem_buffer);
-                        //printf("made it seventh one");
-                        New_one->buffer =(unsigned char*)(Current->buffer + actual_size + sizeof(mem_buffer));
-                        //printf("made it eight one\n");
-                        Current->size = actual_size;
-
-                        //addNode(Current, New_one);
-                        if(Current->prev == NULL && Current->next == NULL)
-                            FreeList = New_one;
-                        if(Current->prev != NULL)  //If first node in list
-                            Current->prev->next = New_one;
-                        if(Current->next != NULL)  //If last node in list
-                            Current->next->prev = New_one;
-                        
-                        return New_one->buffer;  //Pointer to buffer
-                    }
-
-                }
-        Current = Current->next;
-
+   if(FreeList == NULL) return NULL;
+    mem_buffer *pointer = FreeList;
+    
+    while (pointer != NULL)
+    {
+        if (pointer->status == '0' && pointer->size >= actual_size)
+        {
+            if (pointer->size>actual_size) split(pointer, actual_size);
+            pointer->status='1';
+            return pointer->buffer;  
+        }
+        pointer = pointer->next;
     }
     return NULL;
 }
@@ -131,42 +89,27 @@ void* nextFit(int actual_size){
 }
 
 void* bestFit(int actual_size){
-    Current = FreeList;
-    mem_buffer *tempnode = NULL;
-    while(Current != NULL){
-    if (actual_size <= Current->size)
-        if ((tempnode==NULL) || tempnode->size > Current->size)
-            tempnode = Current;
-    }
-    
-    if (tempnode != NULL)
-    {
-        if (tempnode->size == actual_size)  //Perfect fit
-        {
-            if (tempnode->prev != NULL)
-                tempnode->prev->next = tempnode->next;
-            if (tempnode->next != NULL)
-                tempnode->next->prev = tempnode->prev;
-            return tempnode->buffer;
+    if(FreeList==NULL) return NULL;
+    mem_buffer *ptr=FreeList;
+    mem_buffer *min=NULL;
+    while(!(ptr==NULL)){
+        if(ptr->status=='0' && ptr->size>=actual_size){
+            min=ptr;
+            break;
         }
-        else
-        {
-            mem_buffer *New_one = NULL;
-        }   
+        ptr=ptr->next;
     }
-
-
-
-    return NULL;
-    
-    //This splits the current block into a new smaller one that maintains connectivity with the rest of the list
-
-/*
-    addNode(Current, New_one);
-    New_one->buffer = (unsigned char*)(Current->buffer + actual_size + sizeof(mem_buffer));
-    Current->buffer = (unsigned char*)(Current->buffer - actual_size - sizeof(mem_buffer));
-    return New_one->buffer;
-    */
+    if(min==NULL) return NULL;
+    ptr=min->next;
+    while(ptr!=NULL){
+        if(ptr->status=='0' && ptr->size>=actual_size && ptr->size<min->size)
+            min=ptr;
+        ptr=ptr->next;
+    }
+    if(min->size>actual_size)
+        split(min,actual_size);
+        min->status='1';
+        return min->buffer;
 }
 
 
@@ -191,18 +134,29 @@ void* mymalloc(size_t size){
     return NULL;
 }
 
+void merge(mem_buffer *pointer){
+pointer->size = pointer->size + pointer->next->size + sizeof(mem_buffer);
+pointer->next = pointer->next->next;
+if(pointer->next)
+    pointer->next->prev = pointer;
+}
 
 void myfree(void* ptr){
-    if (ptr == NULL)
-        return;
-      //Do nothing
-    Free_one = (mem_buffer *) (ptr - 32);
-    if(FreeList == NULL)
-    FreeList = Free_one;
-    else
-    FreeList->next = Free_one;
-    Free_one->prev = FreeList;
-    
+    mem_buffer *pointer = FreeList;
+    if (ptr == NULL)return;//Do nothing
+
+    while(pointer != NULL){
+        if(pointer->buffer == ptr){
+            pointer->status = '0';
+            if(pointer->next && pointer->next->status == '0')
+                merge(pointer);
+            if (pointer->prev && pointer->prev->status == '0')
+                merge(pointer->prev);
+            return;
+        }
+        pointer = pointer->next;
+    }
+
 }
 
 
@@ -244,8 +198,7 @@ void PrintFreeList(){
         printf("next: %p\n", Current->next);
         printf("prev: %p\n", Current->prev);
         printf("buffer: %p\n", Current->buffer);
+        printf("status: %c\n", Current->status);
         Current = Current->next;
-
-
     }
 }
