@@ -24,6 +24,8 @@ mem_buffer *FreeList;
 mem_buffer *Current;
 mem_buffer *New_one;
 mem_buffer *Free_one;
+mem_buffer *FreeList_but_for_next_fit;
+
 
 static unsigned char BigBuffer[CAPICITY];
 
@@ -34,6 +36,7 @@ void createList(){
     FreeList->size = CAPICITY - sizeof(mem_buffer);  //Sets the size of the whole buffer as free
     FreeList->buffer = (unsigned char*)(BigBuffer + sizeof(mem_buffer));  //point to whole buffer
     FreeList->status = '0';  //Sets the status to free
+    FreeList_but_for_next_fit = FreeList;
 }
 
 void myinit(int allocAlg){
@@ -84,7 +87,38 @@ void* firstFit(int actual_size){
 }
 
 void* nextFit(int actual_size){
-    Current = FreeList;
+    if(FreeList==NULL) return NULL;
+
+    while (FreeList_but_for_next_fit != NULL)
+    {
+        if (FreeList_but_for_next_fit->status == '0' && FreeList_but_for_next_fit->size >= actual_size)
+        {
+            if (FreeList_but_for_next_fit->size>actual_size) split(FreeList_but_for_next_fit, actual_size);
+            FreeList_but_for_next_fit->status='1';
+            return FreeList_but_for_next_fit->buffer;  
+        }
+        FreeList_but_for_next_fit = FreeList_but_for_next_fit->next;
+    }
+    mem_buffer *pointer = FreeList;
+
+    
+    while (pointer != NULL)
+    {
+        if (pointer->status == '0' && pointer->size >= actual_size)
+        {
+            if (pointer->size>actual_size) split(pointer, actual_size);
+            pointer->status='1';
+            FreeList_but_for_next_fit = pointer->next;
+            return pointer->buffer;  
+        }
+        pointer = pointer->next;
+    }
+
+
+
+
+
+    //Current = FreeList;
     return NULL;
 }
 
@@ -172,22 +206,34 @@ void* myrealloc(void* ptr, size_t size){
         myfree(ptr);
         return;
     }
+    if(size % 8)
+    actual_size = size + (8-(size % 8)); 
+    mem_buffer *pointer = FreeList;
+    while(pointer != NULL){
+        if(pointer->buffer == ptr){
+            split(pointer, actual_size);
+            break;
+        }
+        pointer = pointer->next;
+    }
+
+    
 }
 
 
 void mycleanup(){
     while (FreeList != NULL)
     {
-        free(FreeList->prev);
+        myfree(FreeList->prev);
         FreeList = FreeList->next;
     }
-    free(FreeList);
-    while (Current != NULL)
-    {
-        free(Current->prev);
-        Current = Current->next;
-    }
-    free(Current);
+    myfree(FreeList);
+   // while (Current != NULL)
+   // {
+     //   free(Current->prev);
+       // Current = Current->next;
+    //}
+    //free(Current);
 }
 
 void PrintFreeList(){

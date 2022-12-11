@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 	/*
 	 * must be first call in the program
 	 */
-	myinit(2);
+	myinit(1);
 	//PrintFreeList();
 
 	//PrintFreeList();
@@ -36,6 +36,10 @@ int main(int argc, char *argv[])
 	myfree(array);
 	myfree(shart);
 	int* test2 = mymalloc(20);
+	int* test3 = mymalloc(124192);
+	int* test4 = mymalloc(20);
+	//myrealloc(fart, 100);
+
 	//myfree(fart);
 	//myfree(array);
 
@@ -48,7 +52,9 @@ int main(int argc, char *argv[])
 	//int* test2 = mymalloc(72);
 	//
 	//PrintFreeList();
-
+	mycleanup();
+	printf("\n");
+	PrintFreeList();
 	/*array = MyMalloc(10);
 	if(array == NULL)
 	{
