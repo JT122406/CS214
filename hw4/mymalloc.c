@@ -22,6 +22,7 @@ typedef struct mem_buffer mem_buffer;
 mem_buffer *FreeList;
 mem_buffer *Current;
 mem_buffer *New_one;
+mem_buffer *Free_one;
 
 static unsigned char BigBuffer[CAPICITY];
 
@@ -193,7 +194,14 @@ void* mymalloc(size_t size){
 
 void myfree(void* ptr){
     if (ptr == NULL)
-        return;  //Do nothing
+        return;
+      //Do nothing
+    Free_one = (mem_buffer *) (ptr - 32);
+    if(FreeList == NULL)
+    FreeList = Free_one;
+    else
+    FreeList->next = Free_one;
+    Free_one->prev = FreeList;
     
 }
 
