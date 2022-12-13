@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
-//#include "mymalloc.h"
+#include "mymalloc.h"
 
 #define CAPICITY 125000
 
@@ -200,11 +200,11 @@ void* myrealloc(void* ptr, size_t size){
     else if (ptr == NULL)
     {
         mymalloc(size);
-        return;
+        return NULL;
     }else if(size == 0)
     {
         myfree(ptr);
-        return;
+        return NULL;
     }
     if(size % 8)
     actual_size = size + (8-(size % 8)); 
@@ -216,8 +216,6 @@ void* myrealloc(void* ptr, size_t size){
         }
         pointer = pointer->next;
     }
-
-    
 }
 
 
@@ -228,12 +226,6 @@ void mycleanup(){
         FreeList = FreeList->next;
     }
     myfree(FreeList);
-   // while (Current != NULL)
-   // {
-     //   free(Current->prev);
-       // Current = Current->next;
-    //}
-    //free(Current);
 }
 
 void PrintFreeList(){
